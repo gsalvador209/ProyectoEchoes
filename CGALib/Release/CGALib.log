@@ -1,0 +1,814 @@
+﻿  Bones.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(111,38): warning C4251: 'Bones::m_BoneMapping': class 'std::map<std::string,unsigned int,std::less<std::string>,std::allocator<std::pair<const std::string,unsigned int>>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Bones.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\map(72,7):
+  see declaration of 'std::map<std::string,unsigned int,std::less<std::string>,std::allocator<std::pair<const std::string,unsigned int>>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(112,24): warning C4251: 'Bones::m_BoneInfo': class 'std::vector<Bones::BoneInfo,std::allocator<Bones::BoneInfo>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Bones.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Bones::BoneInfo,std::allocator<Bones::BoneInfo>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(113,30): warning C4251: 'Bones::bones': class 'std::vector<Bones::VertexBoneData,std::allocator<Bones::VertexBoneData>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Bones.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Bones::VertexBoneData,std::allocator<Bones::VertexBoneData>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Bones.cpp(88,29): warning C4018: '<': signed/unsigned mismatch
+  Box.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(264,12): warning C4251: 'AbstractModel::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(265,12): warning C4251: 'AbstractModel::scale': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(266,12): warning C4251: 'AbstractModel::color': struct 'glm::vec<4,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<4,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(267,12): warning C4251: 'AbstractModel::orientation': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(269,22): warning C4251: 'AbstractModel::vertexArray': class 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(270,22): warning C4251: 'AbstractModel::index': class 'std::vector<GLuint,std::allocator<GLuint>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<GLuint,std::allocator<GLuint>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(271,7): warning C4251: 'AbstractModel::aabb': class 'AbstractModel::AABB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(65,8):
+  see declaration of 'AbstractModel::AABB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(272,6): warning C4251: 'AbstractModel::sbb': class 'AbstractModel::SBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(51,8):
+  see declaration of 'AbstractModel::SBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(273,6): warning C4251: 'AbstractModel::obb': class 'AbstractModel::OBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(94,8):
+  see declaration of 'AbstractModel::OBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         ]
+  (compiling source file 'src/Box.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         ]
+  (compiling source file 'src/Box.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         ]
+  (compiling source file 'src/Box.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         ]
+  (compiling source file 'src/Box.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         ]
+  (compiling source file 'src/Box.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         ]
+  (compiling source file 'src/Box.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Box.h(37,7): warning C4251: 'Box::aabb': class 'AbstractModel::AABB' needs to have dll-interface to be used by clients of class 'Box'
+  (compiling source file 'src/Box.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(65,8):
+  see declaration of 'AbstractModel::AABB'
+  
+  Cylinder.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(264,12): warning C4251: 'AbstractModel::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(265,12): warning C4251: 'AbstractModel::scale': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(266,12): warning C4251: 'AbstractModel::color': struct 'glm::vec<4,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<4,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(267,12): warning C4251: 'AbstractModel::orientation': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(269,22): warning C4251: 'AbstractModel::vertexArray': class 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(270,22): warning C4251: 'AbstractModel::index': class 'std::vector<GLuint,std::allocator<GLuint>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<GLuint,std::allocator<GLuint>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(271,7): warning C4251: 'AbstractModel::aabb': class 'AbstractModel::AABB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(65,8):
+  see declaration of 'AbstractModel::AABB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(272,6): warning C4251: 'AbstractModel::sbb': class 'AbstractModel::SBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(51,8):
+  see declaration of 'AbstractModel::SBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(273,6): warning C4251: 'AbstractModel::obb': class 'AbstractModel::OBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Cylinder.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(94,8):
+  see declaration of 'AbstractModel::OBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         ]
+  (compiling source file 'src/Cylinder.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         ]
+  (compiling source file 'src/Cylinder.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         ]
+  (compiling source file 'src/Cylinder.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         ]
+  (compiling source file 'src/Cylinder.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         ]
+  (compiling source file 'src/Cylinder.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         ]
+  (compiling source file 'src/Cylinder.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Cylinder.cpp(33,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Cylinder.cpp(34,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Cylinder.cpp(44,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Cylinder.cpp(45,11): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  FirstPersonCamera.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(111,12): warning C4251: 'Camera::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/FirstPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(112,12): warning C4251: 'Camera::front': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/FirstPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(113,12): warning C4251: 'Camera::up': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/FirstPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(114,12): warning C4251: 'Camera::right': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/FirstPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(115,12): warning C4251: 'Camera::worldUp': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/FirstPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(117,12): warning C4251: 'Camera::cameraTarget': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/FirstPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+  FontTypeRendering.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\FontTypeRendering.cpp(135,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\FontTypeRendering.cpp(135,31): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Mesh.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(264,12): warning C4251: 'AbstractModel::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(265,12): warning C4251: 'AbstractModel::scale': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(266,12): warning C4251: 'AbstractModel::color': struct 'glm::vec<4,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<4,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(267,12): warning C4251: 'AbstractModel::orientation': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(269,22): warning C4251: 'AbstractModel::vertexArray': class 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(270,22): warning C4251: 'AbstractModel::index': class 'std::vector<GLuint,std::allocator<GLuint>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<GLuint,std::allocator<GLuint>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(271,7): warning C4251: 'AbstractModel::aabb': class 'AbstractModel::AABB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(65,8):
+  see declaration of 'AbstractModel::AABB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(272,6): warning C4251: 'AbstractModel::sbb': class 'AbstractModel::SBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(51,8):
+  see declaration of 'AbstractModel::SBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(273,6): warning C4251: 'AbstractModel::obb': class 'AbstractModel::OBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(94,8):
+  see declaration of 'AbstractModel::OBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         ]
+  (compiling source file 'src/Mesh.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         ]
+  (compiling source file 'src/Mesh.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         ]
+  (compiling source file 'src/Mesh.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         ]
+  (compiling source file 'src/Mesh.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         ]
+  (compiling source file 'src/Mesh.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         ]
+  (compiling source file 'src/Mesh.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(81,14): warning C4251: 'Texture::m_fileName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(84,14): warning C4251: 'Texture::type': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(111,38): warning C4251: 'Bones::m_BoneMapping': class 'std::map<std::string,unsigned int,std::less<std::string>,std::allocator<std::pair<const std::string,unsigned int>>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\map(72,7):
+  see declaration of 'std::map<std::string,unsigned int,std::less<std::string>,std::allocator<std::pair<const std::string,unsigned int>>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(112,24): warning C4251: 'Bones::m_BoneInfo': class 'std::vector<Bones::BoneInfo,std::allocator<Bones::BoneInfo>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Bones::BoneInfo,std::allocator<Bones::BoneInfo>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(113,30): warning C4251: 'Bones::bones': class 'std::vector<Bones::VertexBoneData,std::allocator<Bones::VertexBoneData>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Bones::VertexBoneData,std::allocator<Bones::VertexBoneData>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Mesh.h(54,24): warning C4251: 'Mesh::textures': class 'std::vector<Texture *,std::allocator<Texture *>>' needs to have dll-interface to be used by clients of class 'Mesh'
+  (compiling source file 'src/Mesh.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Texture *,std::allocator<Texture *>>'
+  
+  Model.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(264,12): warning C4251: 'AbstractModel::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(265,12): warning C4251: 'AbstractModel::scale': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(266,12): warning C4251: 'AbstractModel::color': struct 'glm::vec<4,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<4,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(267,12): warning C4251: 'AbstractModel::orientation': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(269,22): warning C4251: 'AbstractModel::vertexArray': class 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(270,22): warning C4251: 'AbstractModel::index': class 'std::vector<GLuint,std::allocator<GLuint>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<GLuint,std::allocator<GLuint>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(271,7): warning C4251: 'AbstractModel::aabb': class 'AbstractModel::AABB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(65,8):
+  see declaration of 'AbstractModel::AABB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(272,6): warning C4251: 'AbstractModel::sbb': class 'AbstractModel::SBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(51,8):
+  see declaration of 'AbstractModel::SBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(273,6): warning C4251: 'AbstractModel::obb': class 'AbstractModel::OBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(94,8):
+  see declaration of 'AbstractModel::OBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         ]
+  (compiling source file 'src/Model.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         ]
+  (compiling source file 'src/Model.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         ]
+  (compiling source file 'src/Model.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         ]
+  (compiling source file 'src/Model.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         ]
+  (compiling source file 'src/Model.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         ]
+  (compiling source file 'src/Model.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(81,14): warning C4251: 'Texture::m_fileName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(84,14): warning C4251: 'Texture::type': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(111,38): warning C4251: 'Bones::m_BoneMapping': class 'std::map<std::string,unsigned int,std::less<std::string>,std::allocator<std::pair<const std::string,unsigned int>>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\map(72,7):
+  see declaration of 'std::map<std::string,unsigned int,std::less<std::string>,std::allocator<std::pair<const std::string,unsigned int>>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(112,24): warning C4251: 'Bones::m_BoneInfo': class 'std::vector<Bones::BoneInfo,std::allocator<Bones::BoneInfo>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Bones::BoneInfo,std::allocator<Bones::BoneInfo>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Bones.h(113,30): warning C4251: 'Bones::bones': class 'std::vector<Bones::VertexBoneData,std::allocator<Bones::VertexBoneData>>' needs to have dll-interface to be used by clients of class 'Bones'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Bones::VertexBoneData,std::allocator<Bones::VertexBoneData>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Mesh.h(54,24): warning C4251: 'Mesh::textures': class 'std::vector<Texture *,std::allocator<Texture *>>' needs to have dll-interface to be used by clients of class 'Mesh'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Texture *,std::allocator<Texture *>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Model.h(66,21): warning C4251: 'Model::meshes': class 'std::vector<Mesh *,std::allocator<Mesh *>>' needs to have dll-interface to be used by clients of class 'Model'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Mesh *,std::allocator<Mesh *>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Model.h(67,24): warning C4251: 'Model::textureLoaded': class 'std::vector<Texture *,std::allocator<Texture *>>' needs to have dll-interface to be used by clients of class 'Model'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<Texture *,std::allocator<Texture *>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Model.h(68,14): warning C4251: 'Model::directory': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Model'
+  (compiling source file 'src/Model.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Model.h(70,12): warning C4251: 'Model::m_GlobalInverseTransform': struct 'glm::mat<4,4,glm::f32,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Model'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(36,78):
+  see declaration of 'glm::mat<4,4,glm::f32,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Model.h(72,19): warning C4251: 'Model::importer': class 'Assimp::Importer' needs to have dll-interface to be used by clients of class 'Model'
+  (compiling source file 'src/Model.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\assimp\include\assimp\Importer.hpp(122,18):
+  see declaration of 'Assimp::Importer'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Model.cpp(27,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Model.cpp(32,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Model.cpp(92,55): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Shader.cpp
+  ShadowBox.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(111,12): warning C4251: 'Camera::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(112,12): warning C4251: 'Camera::front': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(113,12): warning C4251: 'Camera::up': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(114,12): warning C4251: 'Camera::right': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(115,12): warning C4251: 'Camera::worldUp': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(117,12): warning C4251: 'Camera::cameraTarget': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\ShadowBox.h(40,11): warning C4251: 'ShadowBox::front': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'ShadowBox'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\ShadowBox.h(41,11): warning C4251: 'ShadowBox::up': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'ShadowBox'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\ShadowBox.h(42,11): warning C4251: 'ShadowBox::right': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'ShadowBox'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\ShadowBox.h(43,11): warning C4251: 'ShadowBox::mins': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'ShadowBox'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\ShadowBox.h(44,11): warning C4251: 'ShadowBox::maxs': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'ShadowBox'
+  (compiling source file 'src/ShadowBox.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\ShadowBox.cpp(14,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\ShadowBox.cpp(15,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\ShadowBox.cpp(16,18): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\ShadowBox.cpp(17,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Sphere.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(264,12): warning C4251: 'AbstractModel::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(265,12): warning C4251: 'AbstractModel::scale': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(266,12): warning C4251: 'AbstractModel::color': struct 'glm::vec<4,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<4,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(267,12): warning C4251: 'AbstractModel::orientation': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(269,22): warning C4251: 'AbstractModel::vertexArray': class 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(270,22): warning C4251: 'AbstractModel::index': class 'std::vector<GLuint,std::allocator<GLuint>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<GLuint,std::allocator<GLuint>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(271,7): warning C4251: 'AbstractModel::aabb': class 'AbstractModel::AABB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(65,8):
+  see declaration of 'AbstractModel::AABB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(272,6): warning C4251: 'AbstractModel::sbb': class 'AbstractModel::SBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(51,8):
+  see declaration of 'AbstractModel::SBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(273,6): warning C4251: 'AbstractModel::obb': class 'AbstractModel::OBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(94,8):
+  see declaration of 'AbstractModel::OBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         ]
+  (compiling source file 'src/Sphere.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         ]
+  (compiling source file 'src/Sphere.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         ]
+  (compiling source file 'src/Sphere.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         ]
+  (compiling source file 'src/Sphere.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         ]
+  (compiling source file 'src/Sphere.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         ]
+  (compiling source file 'src/Sphere.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Sphere.h(39,6): warning C4251: 'Sphere::sbb': class 'AbstractModel::SBB' needs to have dll-interface to be used by clients of class 'Sphere'
+  (compiling source file 'src/Sphere.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(51,8):
+  see declaration of 'AbstractModel::SBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Sphere.cpp(8,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Sphere.cpp(12,16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Terrain.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(264,12): warning C4251: 'AbstractModel::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(265,12): warning C4251: 'AbstractModel::scale': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(266,12): warning C4251: 'AbstractModel::color': struct 'glm::vec<4,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<4,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(267,12): warning C4251: 'AbstractModel::orientation': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(269,22): warning C4251: 'AbstractModel::vertexArray': class 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<AbstractModel::Vertex,std::allocator<AbstractModel::Vertex>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(270,22): warning C4251: 'AbstractModel::index': class 'std::vector<GLuint,std::allocator<GLuint>>' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\vector(436,7):
+  see declaration of 'std::vector<GLuint,std::allocator<GLuint>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(271,7): warning C4251: 'AbstractModel::aabb': class 'AbstractModel::AABB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(65,8):
+  see declaration of 'AbstractModel::AABB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(272,6): warning C4251: 'AbstractModel::sbb': class 'AbstractModel::SBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(51,8):
+  see declaration of 'AbstractModel::SBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(273,6): warning C4251: 'AbstractModel::obb': class 'AbstractModel::OBB' needs to have dll-interface to be used by clients of class 'AbstractModel'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(94,8):
+  see declaration of 'AbstractModel::OBB'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(75,17): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(76,17): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(77,17): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(78,17): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(79,17): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         with
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         [
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:             T=float
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\AbstractModel.h(80,17): warning C4244:         ]
+  (compiling source file 'src/Terrain.cpp')
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(81,14): warning C4251: 'Texture::m_fileName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(84,14): warning C4251: 'Texture::type': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Terrain.h(50,14): warning C4251: 'Terrain::heightMap': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Terrain'
+  (compiling source file 'src/Terrain.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Terrain.cpp(116,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Terrain.cpp(117,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Terrain.cpp(142,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\Terrain.cpp(143,12): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+  Texture.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(81,14): warning C4251: 'Texture::m_fileName': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Texture.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Texture.h(84,14): warning C4251: 'Texture::type': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'Texture'
+  (compiling source file 'src/Texture.cpp')
+  C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.39.33519\include\xstring(2337,7):
+  see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+  ThirdPersonCamera.cpp
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(111,12): warning C4251: 'Camera::position': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ThirdPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(112,12): warning C4251: 'Camera::front': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ThirdPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(113,12): warning C4251: 'Camera::up': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ThirdPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(114,12): warning C4251: 'Camera::right': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ThirdPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(115,12): warning C4251: 'Camera::worldUp': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ThirdPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\include\Headers\Camera.h(117,12): warning C4251: 'Camera::cameraTarget': struct 'glm::vec<3,float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'Camera'
+  (compiling source file 'src/ThirdPersonCamera.cpp')
+  C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\external\glm\glm\detail\qualifier.hpp(35,66):
+  see declaration of 'glm::vec<3,float,glm::packed_highp>'
+  
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\ThirdPersonCamera.cpp(23,26): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\CGALib\src\ThirdPersonCamera.cpp(25,27): warning C4305: '=': truncation from 'double' to 'float'
+  TimeManager.cpp
+     Creating library C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\Release\CGALib.lib and object C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\Release\CGALib.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 1442 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  CGALib.vcxproj -> C:\Users\dbarr\Documents\CGA\ComputacionGraficaAvanzada\Release\CGALib.dll
