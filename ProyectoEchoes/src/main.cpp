@@ -260,26 +260,27 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	} else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
+	std::cout << "AAAA" << std::endl;
 	texturePiedra.freeImage();
-
-	Texture texturePasto("../Textures/piedra.png");
-	texturePasto.loadImage();
-	glGenTextures(1, &texturePastoID);
-	glBindTexture(GL_TEXTURE_2D, texturePastoID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (texturePasto.getData()) {
-		std::cout << "Numero de canales :=> " << texturePasto.getChannels() << std::endl;
-		glTexImage2D(GL_TEXTURE_2D, 0, texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePasto.getWidth(), texturePasto.getHeight(), 0,
-		texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePasto.getData());
-		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-		std::cout << "Failed to load texture" << std::endl;
-	// Libera la memoria de la textura
-	texturePasto.freeImage();
+	std::cout << "AAAAA2" << std::endl;
+	// Texture texturePasto("../Textures/terreno2.png");
+	// texturePasto.loadImage();
+	// glGenTextures(1, &texturePastoID);
+	// glBindTexture(GL_TEXTURE_2D, texturePastoID);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// if (texturePasto.getData()) {
+	// 	std::cout << "Numero de canales :=> " << texturePasto.getChannels() << std::endl;
+	// 	glTexImage2D(GL_TEXTURE_2D, 0, texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePasto.getWidth(), texturePasto.getHeight(), 0,
+	// 	texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePasto.getData());
+	// 	// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+	// 	glGenerateMipmap(GL_TEXTURE_2D);
+	// } else
+	// 	std::cout << "Failed to load texture" << std::endl;
+	// // Libera la memoria de la textura
+	// texturePasto.freeImage();
 }
 
 void destroy() {

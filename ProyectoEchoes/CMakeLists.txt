@@ -27,7 +27,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
         "../external/OpenAL/lib/x64"
     )
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    include_directories(${CMAKE_SOURCE_DIR}/CGALib/include "/usr/include/freetype2")
+    include_directories(${CMAKE_SOURCE_DIR}/CGALib/include)
 endif()
 
 add_executable(ProyectoEchoes ./src/main.cpp)

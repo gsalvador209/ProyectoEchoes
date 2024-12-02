@@ -35,6 +35,9 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif()
 add_library(CGALib SHARED ${CGALib_SRC})
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+     set(LIBRARY_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/../../bin")     
+     file(MAKE_DIRECTORY ${LIBRARY_OUTPUT_DIR})
+     message(STATUS "Creating directory: ${LIBRARY_OUTPUT_DIR}")
      set_target_properties(CGALib
           PROPERTIES
           RUNTIME_OUTPUT_DIRECTORY "../../bin"
