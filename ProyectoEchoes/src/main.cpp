@@ -1,25 +1,26 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
+//glew include
+#include <GL/glew.h>
 
-
+//std includes
 #include <string>
 #include <iostream>
 
-#include <GL/glew.h>
+//glfw include
 #include <GLFW/glfw3.h>
 
 // program include
 #include "Headers/TimeManager.h"
+
+// Shader include
 #include "Headers/Shader.h"
+
+// Model geometric includes
 #include "Headers/Sphere.h"
 #include "Headers/Cylinder.h"
 #include "Headers/Box.h"
 #include "Headers/FirstPersonCamera.h"
-#include "Headers/Texture.h"
-#include "Headers/AnimationUtils.h"
-#include "Headers/Terrain.h"
-#include "Headers/Model.h"
-
 
 //GLM include
 #define GLM_FORCE_RADIANS
@@ -27,6 +28,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Headers/Texture.h"
+
+// Include loader Model class
+#include "Headers/Model.h"
+
+// Include Terrain
+#include "Headers/Terrain.h"
+
+#include "Headers/AnimationUtils.h"
 
 #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
 
@@ -40,19 +50,17 @@ Shader shader;
 Shader shaderSkybox;
 //Shader con multiples luces
 Shader shaderMulLighting;
-
 Shader shaderTerrain;
 
 std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
 
-Sphere skyboxSphere(20, 20);
 
-// Model declarations
+Sphere skyboxSphere(20, 20);
+Model pepsiman;
+// Terrain model instance
 Terrain terrain(-1, -1, 1000, 8, "../Textures/echoesHeightMap.png");
 
-Model pepsiman;
-
-GLuint textureCaminoID, textureAdoquinID, texturePiedraID, textureBlendMapID, texturePastoID;
+GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
 GLuint skyboxTextureID;
 
 GLenum types[6] = {
@@ -62,8 +70,6 @@ GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
 GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
 GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
 GL_TEXTURE_CUBE_MAP_NEGATIVE_Z };
-
-//skybox filepaths
 
 std::string fileNames[6] = { "../Textures/mp_bloodvalley/blood-valley_ft.tga",
 		"../Textures/mp_bloodvalley/blood-valley_bk.tga",
@@ -78,7 +84,6 @@ int lastMousePosY, offsetY = 0;
 
 // Model matrix definitions
 glm::mat4 modelMatrixPepsiman = glm::mat4(1.0f);
-
 
 double deltaTime;
 double currTime, lastTime;
@@ -149,19 +154,20 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Inicialización de los shaders
 	shader.initialize("../Shaders/colorShader.vs", "../Shaders/colorShader.fs");
 	shaderSkybox.initialize("../Shaders/skyBox.vs", "../Shaders/skyBox.fs");
-	shaderMulLighting.initialize("../Shaders/iluminacion_textura_animation.vs", "../Shaders/multipleLights.fs");
+	shaderMulLighting.initialize("../Shaders/iluminacion_textura_animation.vs", "../Shaders/multipleLights.fs");\
 	shaderTerrain.initialize("../Shaders/terrain.vs", "../Shaders/terrain.fs");
-
+	// Inicializacion de los objetos.
 	skyboxSphere.init();
 	skyboxSphere.setShader(&shaderSkybox);
 	skyboxSphere.setScale(glm::vec3(20.0f, 20.0f, 20.0f));
 
-	terrain.init();
-	terrain.setShader(&shaderTerrain);
-
-	pepsiman.loadModel("../Models/Pepsiman/pepsiman.fbx");
+	//Pepissman
+	pepsiman.loadModel("../models/Pepsiman/dance.fbx");
 	pepsiman.setShader(&shaderMulLighting);
 
+	// Terreno
+	terrain.init();
+	terrain.setShader(&shaderTerrain);
 
 	camera->setPosition(glm::vec3(0.0, 3.0, 4.0));
 	
@@ -187,105 +193,109 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 		skyboxTexture.freeImage();
 	}
 
-	Texture textureBlendMap("../Textures/echoesBlendMap.png");
-	textureBlendMap.loadImage();
-	glGenTextures(1, &textureBlendMapID);
-	glBindTexture(GL_TEXTURE_2D, textureBlendMapID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	// Definiendo la textura a utilizar
+	Texture textureCesped("../Textures/terreno2.png");
+	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
+	textureCesped.loadImage();
+	// Creando la textura con id 1
+	glGenTextures(1, &textureCespedID);
+	// Enlazar esa textura a una tipo de textura de 2D.
+	glBindTexture(GL_TEXTURE_2D, textureCespedID);
+	// set the texture wrapping parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // set texture wrapping to GL_CLAMP_TO_EDGE
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	// set texture filtering parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (textureBlendMap.getData()) {
-		std::cout << "Numero de canales :=> " << textureBlendMap.getChannels() << std::endl;
+	// Verifica si se pudo abrir la textura
+	if (textureCesped.getData()) {
+		// Transferis los datos de la imagen a memoria
+		// Tipo de textura, Mipmaps, Formato interno de openGL, ancho, alto, Mipmaps,
+		// Formato interno de la libreria de la imagen, el tipo de dato y al apuntador
+		// a los datos
+		std::cout << "Numero de canales :=> " << textureCesped.getChannels() << std::endl;
+		glTexImage2D(GL_TEXTURE_2D, 0, textureCesped.getChannels() == 3 ? GL_RGB : GL_RGBA, textureCesped.getWidth(), textureCesped.getHeight(), 0,
+		textureCesped.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, textureCesped.getData());
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	} else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	textureCesped.freeImage();
+
+	// Definiendo la textura
+	Texture textureR("../Textures/adoquin.png");
+	textureR.loadImage(); // Cargar la textura
+	glGenTextures(1, &textureTerrainRID); // Creando el id de la textura del landingpad
+	glBindTexture(GL_TEXTURE_2D, textureTerrainRID); // Se enlaza la textura
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Wrapping en el eje u
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Wrapping en el eje v
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Filtering de minimización
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Filtering de maximimizacion
+	if(textureR.getData()){
+		// Transferir los datos de la imagen a la tarjeta
+		glTexImage2D(GL_TEXTURE_2D, 0, textureR.getChannels() == 3 ? GL_RGB : GL_RGBA, textureR.getWidth(), textureR.getHeight(), 0,
+		textureR.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, textureR.getData());
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else 
+		std::cout << "Fallo la carga de textura" << std::endl;
+	textureR.freeImage(); // Liberamos memoria
+
+	Texture textureG("../Textures/piedra2.png");
+	textureG.loadImage(); // Cargar la textura
+	glGenTextures(1, &textureTerrainGID); // Creando el id de la textura del landingpad
+	glBindTexture(GL_TEXTURE_2D, textureTerrainGID); // Se enlaza la textura
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Wrapping en el eje u
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Wrapping en el eje v
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Filtering de minimización
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Filtering de maximimizacion
+	if(textureG.getData()){
+		// Transferir los datos de la imagen a la tarjeta
+		glTexImage2D(GL_TEXTURE_2D, 0, textureG.getChannels() == 3 ? GL_RGB : GL_RGBA, textureG.getWidth(), textureG.getHeight(), 0,
+		textureG.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, textureG.getData());
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else 
+		std::cout << "Fallo la carga de textura" << std::endl;
+	textureG.freeImage(); // Liberamos memoria
+
+	Texture textureB("../Textures/camino.png");
+	textureB.loadImage(); // Cargar la textura
+	glGenTextures(1, &textureTerrainBID); // Creando el id de la textura del landingpad
+	glBindTexture(GL_TEXTURE_2D, textureTerrainBID); // Se enlaza la textura
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Wrapping en el eje u
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Wrapping en el eje v
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Filtering de minimización
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Filtering de maximimizacion
+	if(textureB.getData()){
+		// Transferir los datos de la imagen a la tarjeta
+		glTexImage2D(GL_TEXTURE_2D, 0, textureB.getChannels() == 3 ? GL_RGB : GL_RGBA, textureB.getWidth(), textureB.getHeight(), 0,
+		textureB.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, textureB.getData());
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else 
+		std::cout << "Fallo la carga de textura" << std::endl;
+	textureB.freeImage(); // Liberamos memoria
+
+	Texture textureBlendMap("../Textures/echoesBlendMap.png");
+	textureBlendMap.loadImage(); // Cargar la textura
+	glGenTextures(1, &textureTerrainBlendMapID); // Creando el id de la textura del landingpad
+	glBindTexture(GL_TEXTURE_2D, textureTerrainBlendMapID); // Se enlaza la textura
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // Wrapping en el eje u
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); // Wrapping en el eje v
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // Filtering de minimización
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // Filtering de maximimizacion
+	if(textureBlendMap.getData()){
+		// Transferir los datos de la imagen a la tarjeta
 		glTexImage2D(GL_TEXTURE_2D, 0, textureBlendMap.getChannels() == 3 ? GL_RGB : GL_RGBA, textureBlendMap.getWidth(), textureBlendMap.getHeight(), 0,
 		textureBlendMap.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, textureBlendMap.getData());
-		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-		std::cout << "Failed to load texture" << std::endl;
-	// Libera la memoria de la textura
-	textureBlendMap.freeImage();
+	}
+	else 
+		std::cout << "Fallo la carga de textura" << std::endl;
+	textureBlendMap.freeImage(); // Liberamos memoria
 
-
-	Texture textureCamino("../Textures/camino.png");
-	textureCamino.loadImage();
-	glGenTextures(1, &textureCaminoID);
-	glBindTexture(GL_TEXTURE_2D, textureCaminoID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (textureCamino.getData()) {
-		std::cout << "Numero de canales :=> " << textureCamino.getChannels() << std::endl;
-		glTexImage2D(GL_TEXTURE_2D, 0, textureCamino.getChannels() == 3 ? GL_RGB : GL_RGBA, textureCamino.getWidth(), textureCamino.getHeight(), 0,
-		textureCamino.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, textureCamino.getData());
-		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-		std::cout << "Failed to load texture" << std::endl;
-	// Libera la memoria de la textura
-	textureCamino.freeImage();
-
-
-	Texture textureAdoquin("../Textures/adoquin.png");
-	textureAdoquin.loadImage();
-	glGenTextures(1, &textureAdoquinID);
-	glBindTexture(GL_TEXTURE_2D, textureAdoquinID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (textureAdoquin.getData()) {
-		std::cout << "Numero de canales :=> " << textureAdoquin.getChannels() << std::endl;
-		glTexImage2D(GL_TEXTURE_2D, 0, textureAdoquin.getChannels() == 3 ? GL_RGB : GL_RGBA, textureAdoquin.getWidth(), textureAdoquin.getHeight(), 0,
-		textureAdoquin.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, textureAdoquin.getData());
-		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-		std::cout << "Failed to load texture" << std::endl;
-	// Libera la memoria de la textura
-	textureAdoquin.freeImage();
-
-
-	Texture texturePiedra("../Textures/piedra.png");
-	texturePiedra.loadImage();
-	glGenTextures(1, &texturePiedraID);
-	glBindTexture(GL_TEXTURE_2D, texturePiedraID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (texturePiedra.getData()) {
-		std::cout << "Numero de canales :=> " << texturePiedra.getChannels() << std::endl;
-		//std::cout << "AAAA" << std::endl;
-		glTexImage2D(GL_TEXTURE_2D, 0, texturePiedra.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePiedra.getWidth(), texturePiedra.getHeight(), 0,
-		texturePiedra.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePiedra.getData());
-		//td::cout << "AAAAA2" << std::endl;
-		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-		std::cout << "Failed to load texture" << std::endl;
-	// Libera la memoria de la textura
-	texturePiedra.freeImage();
-
-	Texture texturePasto("../Textures/terreno2.png");
-	texturePasto.loadImage();
-	glGenTextures(1, &texturePastoID);
-	glBindTexture(GL_TEXTURE_2D, texturePastoID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	if (texturePasto.getData()) {
-		std::cout << "Numero de canales :=> " << texturePasto.getChannels() << std::endl;
-		glTexImage2D(GL_TEXTURE_2D, 0, texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePasto.getWidth(), texturePasto.getHeight(), 0,
-		texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePasto.getData());
-		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
-		glGenerateMipmap(GL_TEXTURE_2D);
-	} else
-		std::cout << "Failed to load texture" << std::endl;
-	// Libera la memoria de la textura
-	texturePasto.freeImage();
 }
 
 void destroy() {
@@ -299,29 +309,26 @@ void destroy() {
 	shaderMulLighting.destroy();
 	shaderSkybox.destroy();
 	shaderTerrain.destroy();
+	
 
 	// Basic objects Delete
 	skyboxSphere.destroy();
-
-
-
-	// Custom objects Delete
 	pepsiman.destroy();
 
+	// Terrains objects Delete
+	terrain.destroy();
 
 	// Textures Delete
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glDeleteTextures(1, &textureCaminoID);
-	glDeleteTextures(1, &textureAdoquinID);
-	glDeleteTextures(1, &texturePiedraID);
-	glDeleteTextures(1, &textureBlendMapID);
-	glDeleteTextures(1, &texturePastoID);
-
+	glDeleteTextures(1, &textureCespedID);
+	glDeleteTextures(1, &textureTerrainRID);
+	glDeleteTextures(1, &textureTerrainGID);
+	glDeleteTextures(1, &textureTerrainBID);
+	glDeleteTextures(1, &textureTerrainBlendMapID);
 
 	// Cube Maps Delete
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	glDeleteTextures(1, &skyboxTextureID);
-
 }
 
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes) {
@@ -390,9 +397,10 @@ bool processInput(bool continueApplication) {
 
 void applicationLoop() {
 	bool psi = true;
-    // Model matrix transformations
+
 	modelMatrixPepsiman = glm::translate(modelMatrixPepsiman, glm::vec3(5.0f, 0.05, 0.0f));
 
+	// Variables to interpolation key frames
 	lastTime = TimeManager::Instance().GetTime();
 
 	while (psi) {
@@ -405,7 +413,14 @@ void applicationLoop() {
 		TimeManager::Instance().CalculateFrameRate(true);
 		deltaTime = TimeManager::Instance().DeltaTime;
 		psi = processInput(true);
-        
+
+		// Variables donde se guardan las matrices de cada articulacion por 1 frame
+		std::vector<float> matrixDartJoints;
+		std::vector<glm::mat4> matrixDart;
+		std::vector<float> matrixBuzzJoints;
+		std::vector<glm::mat4> matrixBuzz;
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 				(float) screenWidth / (float) screenHeight, 0.01f, 100.0f);
 		glm::mat4 view = camera->getViewMatrix();
@@ -426,8 +441,9 @@ void applicationLoop() {
 				glm::value_ptr(view));
 		shaderTerrain.setMatrix4("projection", 1, false,
 				glm::value_ptr(projection));
-		shaderTerrain.setMatrix4("view", 1, false,
-				glm::value_ptr(view));
+		shaderTerrain.setMatrix4("view", 1, false,glm::value_ptr(view));
+
+		//
 
 		/*******************************************
 		 * Propiedades Luz direccional
@@ -456,55 +472,47 @@ void applicationLoop() {
 		shaderMulLighting.setInt("pointLightCount", 0);
 		shaderTerrain.setInt("pointLightCount", 0);
 
-		/********************************************
-		 * TERRAIN
-		 ********************************************/
+		/*******************************************
+		 * Terrain Cesped
+		 *******************************************/
 		glm::mat4 modelCesped = glm::mat4(1.0);
 		modelCesped = glm::translate(modelCesped, glm::vec3(0.0, 0.0, 0.0));
 		modelCesped = glm::scale(modelCesped, glm::vec3(200.0, 0.001, 200.0));
-	
+		// Se activa la textura del agua
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureBlendMapID);
-		//std::cout << "bacground" << std::endl; 
+		glBindTexture(GL_TEXTURE_2D, textureCespedID);
 		shaderTerrain.setInt("backgroundTexture", 0);
 		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, textureAdoquinID);
-		//std::cout << "R" << std::endl; 
+		glBindTexture(GL_TEXTURE_2D, textureTerrainRID);
 		shaderTerrain.setInt("rTexture", 1);
 		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, texturePiedraID);
-		//std::cout << "G" << std::endl; 
+		glBindTexture(GL_TEXTURE_2D, textureTerrainGID);
 		shaderTerrain.setInt("gTexture", 2);
 		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, textureCaminoID);
-		//std::cout << "B" << std::endl; 
+		glBindTexture(GL_TEXTURE_2D, textureTerrainBID);
 		shaderTerrain.setInt("bTexture", 3);
 		glActiveTexture(GL_TEXTURE4);
-
-		glBindTexture(GL_TEXTURE_2D, textureBlendMapID);
+		glBindTexture(GL_TEXTURE_2D, textureTerrainBlendMapID);
 		shaderTerrain.setInt("blendMapTexture", 4);
+
 		shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(80, 80)));
 		terrain.setPosition(glm::vec3(100, 0, 100));
 		terrain.render();
-		//std::cout << "blendmap" << std::endl; 
 		shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0, 0)));
 		glBindTexture(GL_TEXTURE_2D, 0);
-		//std::cout << "blendmap fin" << std::endl; 
 
 		/*******************************************
 		 * Custom objects obj
 		 *******************************************/
-		std::cout << "PEPSI" << std::endl; 
-		
-		//modelMatrixPepsiman[3][1] = terrain.getHeightTerrain(modelMatrixPepsiman[3][0], modelMatrixPepsiman[3][2]);
+
+		modelMatrixPepsiman[3][1] = terrain.getHeightTerrain(modelMatrixPepsiman[3][0], modelMatrixPepsiman[3][2]);
 		glm::mat4 modelMatrixPepsimanBody = glm::mat4(modelMatrixPepsiman);
 		modelMatrixPepsimanBody = glm::scale(modelMatrixPepsimanBody, glm::vec3(0.009f));
 		pepsiman.setAnimationIndex(0);
 		//pepsiman.enableWireMode();
 		pepsiman.render(modelMatrixPepsimanBody);
 		pepsiman.enableFillMode();
-	
-		std::cout << "SKYBOX" << std::endl;
+
 		/*******************************************
 		 * Skybox
 		 *******************************************/
@@ -521,6 +529,7 @@ void applicationLoop() {
 		glCullFace(oldCullFaceMode);
 		glDepthFunc(oldDepthFuncMode);
 
+		
 		glfwSwapBuffers(window);
 	}
 }
