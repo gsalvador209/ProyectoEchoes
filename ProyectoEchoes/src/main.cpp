@@ -149,8 +149,12 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Inicialización de los shaders
 	shader.initialize("../Shaders/colorShader.vs", "../Shaders/colorShader.fs");
 	shaderSkybox.initialize("../Shaders/skyBox.vs", "../Shaders/skyBox.fs");
-	shaderMulLighting.initialize("../Shaders/iluminacion_texture_res.vs", "../Shaders/multipleLights.fs");
+	shaderMulLighting.initialize("../Shaders/iluminacion_textura_animation.vs", "../Shaders/multipleLights.fs");
 	shaderTerrain.initialize("../Shaders/terrain.vs", "../Shaders/terrain.fs");
+
+	skyboxSphere.init();
+	skyboxSphere.setShader(&shaderSkybox);
+	skyboxSphere.setScale(glm::vec3(20.0f, 20.0f, 20.0f));
 
 	terrain.init();
 	terrain.setShader(&shaderTerrain);
@@ -253,34 +257,35 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	if (texturePiedra.getData()) {
 		std::cout << "Numero de canales :=> " << texturePiedra.getChannels() << std::endl;
-		std::cout << "AAAA" << std::endl;
+		//std::cout << "AAAA" << std::endl;
 		glTexImage2D(GL_TEXTURE_2D, 0, texturePiedra.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePiedra.getWidth(), texturePiedra.getHeight(), 0,
 		texturePiedra.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePiedra.getData());
-		std::cout << "AAAAA2" << std::endl;
+		//td::cout << "AAAAA2" << std::endl;
 		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
 	} else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
 	texturePiedra.freeImage();
-	// Texture texturePasto("../Textures/terreno2.png");
-	// texturePasto.loadImage();
-	// glGenTextures(1, &texturePastoID);
-	// glBindTexture(GL_TEXTURE_2D, texturePastoID);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// if (texturePasto.getData()) {
-	// 	std::cout << "Numero de canales :=> " << texturePasto.getChannels() << std::endl;
-	// 	glTexImage2D(GL_TEXTURE_2D, 0, texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePasto.getWidth(), texturePasto.getHeight(), 0,
-	// 	texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePasto.getData());
-	// 	// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
-	// 	glGenerateMipmap(GL_TEXTURE_2D);
-	// } else
-	// 	std::cout << "Failed to load texture" << std::endl;
-	// // Libera la memoria de la textura
-	// texturePasto.freeImage();
+
+	Texture texturePasto("../Textures/terreno2.png");
+	texturePasto.loadImage();
+	glGenTextures(1, &texturePastoID);
+	glBindTexture(GL_TEXTURE_2D, texturePastoID);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	if (texturePasto.getData()) {
+		std::cout << "Numero de canales :=> " << texturePasto.getChannels() << std::endl;
+		glTexImage2D(GL_TEXTURE_2D, 0, texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePasto.getWidth(), texturePasto.getHeight(), 0,
+		texturePasto.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePasto.getData());
+		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
+		glGenerateMipmap(GL_TEXTURE_2D);
+	} else
+		std::cout << "Failed to load texture" << std::endl;
+	// Libera la memoria de la textura
+	texturePasto.freeImage();
 }
 
 void destroy() {
@@ -460,54 +465,61 @@ void applicationLoop() {
 	
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureBlendMapID);
+		std::cout << "bacground" << std::endl; 
 		shaderTerrain.setInt("backgroundTexture", 0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, textureAdoquinID);
+		std::cout << "R" << std::endl; 
 		shaderTerrain.setInt("rTexture", 1);
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, texturePiedraID);
+		std::cout << "G" << std::endl; 
 		shaderTerrain.setInt("gTexture", 2);
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, textureCaminoID);
+		std::cout << "B" << std::endl; 
 		shaderTerrain.setInt("bTexture", 3);
 		glActiveTexture(GL_TEXTURE4);
+
 		glBindTexture(GL_TEXTURE_2D, textureBlendMapID);
 		shaderTerrain.setInt("blendMapTexture", 4);
-
-		shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(80, 80)));
+		//shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(80, 80)));
 		terrain.setPosition(glm::vec3(100, 0, 100));
 		terrain.render();
-		shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0, 0)));
-		glBindTexture(GL_TEXTURE_2D, 0);
+		//std::cout << "blendmap" << std::endl; 
+		//shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0, 0)));
+		//glBindTexture(GL_TEXTURE_2D, 0);
+		//std::cout << "blendmap fin" << std::endl; 
 
 		/*******************************************
 		 * Custom objects obj
 		 *******************************************/
+		std::cout << "PEPSI" << std::endl; 
 		
 		modelMatrixPepsiman[3][1] = terrain.getHeightTerrain(modelMatrixPepsiman[3][0], modelMatrixPepsiman[3][2]);
 		glm::mat4 modelMatrixPepsimanBody = glm::mat4(modelMatrixPepsiman);
 		modelMatrixPepsimanBody = glm::scale(modelMatrixPepsimanBody, glm::vec3(0.009f));
 		pepsiman.setAnimationIndex(0);
 		//pepsiman.enableWireMode();
-		pepsiman.render(modelMatrixPepsimanBody);
-		pepsiman.enableFillMode();
+		//pepsiman.render(modelMatrixPepsimanBody);
+		//pepsiman.enableFillMode();
 	
-
-		/*******************************************
-		 * Skybox
-		 *******************************************/
-		GLint oldCullFaceMode;
-		GLint oldDepthFuncMode;
-		// deshabilita el modo del recorte de caras ocultas para ver las esfera desde adentro
-		glGetIntegerv(GL_CULL_FACE_MODE, &oldCullFaceMode);
-		glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFuncMode);
-		shaderSkybox.setFloat("skybox", 0);
-		glCullFace(GL_FRONT);
-		glDepthFunc(GL_LEQUAL);
-		glActiveTexture(GL_TEXTURE0);
-		skyboxSphere.render();
-		glCullFace(oldCullFaceMode);
-		glDepthFunc(oldDepthFuncMode);
+		// std::cout << "SKYBOX" << std::endl;
+		// /*******************************************
+		//  * Skybox
+		//  *******************************************/
+		// GLint oldCullFaceMode;
+		// GLint oldDepthFuncMode;
+		// // deshabilita el modo del recorte de caras ocultas para ver las esfera desde adentro
+		// glGetIntegerv(GL_CULL_FACE_MODE, &oldCullFaceMode);
+		// glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFuncMode);
+		// shaderSkybox.setFloat("skybox", 0);
+		// glCullFace(GL_FRONT);
+		// glDepthFunc(GL_LEQUAL);
+		// glActiveTexture(GL_TEXTURE0);
+		// skyboxSphere.render();
+		// glCullFace(oldCullFaceMode);
+		// glDepthFunc(oldDepthFuncMode);
 
 		glfwSwapBuffers(window);
 	}
@@ -515,6 +527,7 @@ void applicationLoop() {
 
 int main(int argc, char **argv) {
 	init(800, 700, "Window GLFW", false);
+	
 	applicationLoop();
 	destroy();
 	return 1;
