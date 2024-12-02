@@ -253,16 +253,16 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	if (texturePiedra.getData()) {
 		std::cout << "Numero de canales :=> " << texturePiedra.getChannels() << std::endl;
+		std::cout << "AAAA" << std::endl;
 		glTexImage2D(GL_TEXTURE_2D, 0, texturePiedra.getChannels() == 3 ? GL_RGB : GL_RGBA, texturePiedra.getWidth(), texturePiedra.getHeight(), 0,
 		texturePiedra.getChannels() == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, texturePiedra.getData());
+		std::cout << "AAAAA2" << std::endl;
 		// Generan los niveles del mipmap (OpenGL es el ecargado de realizarlos)
 		glGenerateMipmap(GL_TEXTURE_2D);
 	} else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
-	std::cout << "AAAA" << std::endl;
 	texturePiedra.freeImage();
-	std::cout << "AAAAA2" << std::endl;
 	// Texture texturePasto("../Textures/terreno2.png");
 	// texturePasto.loadImage();
 	// glGenTextures(1, &texturePastoID);

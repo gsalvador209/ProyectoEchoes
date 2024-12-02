@@ -21,7 +21,6 @@ __pycache__
 [Bb]uild/
 [Bb]uilds/
 Assets/AssetStoreTools*
-bin/
 
 # Visual Studio cache directory
 .vs/
