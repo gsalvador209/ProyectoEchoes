@@ -496,7 +496,7 @@ void applicationLoop() {
 		 *******************************************/
 		std::cout << "PEPSI" << std::endl; 
 		
-		modelMatrixPepsiman[3][1] = terrain.getHeightTerrain(modelMatrixPepsiman[3][0], modelMatrixPepsiman[3][2]);
+		//modelMatrixPepsiman[3][1] = terrain.getHeightTerrain(modelMatrixPepsiman[3][0], modelMatrixPepsiman[3][2]);
 		glm::mat4 modelMatrixPepsimanBody = glm::mat4(modelMatrixPepsiman);
 		modelMatrixPepsimanBody = glm::scale(modelMatrixPepsimanBody, glm::vec3(0.009f));
 		pepsiman.setAnimationIndex(0);
