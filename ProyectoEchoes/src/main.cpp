@@ -48,7 +48,7 @@ std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
 Sphere skyboxSphere(20, 20);
 
 // Model declarations
-Terrain terrain(-1, -1, 1000, 8, "../Textures/p4/echoesHeightMap.png");
+Terrain terrain(-1, -1, 1000, 8, "../Textures/echoesHeightMap.png");
 
 Model pepsiman;
 
@@ -465,30 +465,30 @@ void applicationLoop() {
 	
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, textureBlendMapID);
-		std::cout << "bacground" << std::endl; 
+		//std::cout << "bacground" << std::endl; 
 		shaderTerrain.setInt("backgroundTexture", 0);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, textureAdoquinID);
-		std::cout << "R" << std::endl; 
+		//std::cout << "R" << std::endl; 
 		shaderTerrain.setInt("rTexture", 1);
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, texturePiedraID);
-		std::cout << "G" << std::endl; 
+		//std::cout << "G" << std::endl; 
 		shaderTerrain.setInt("gTexture", 2);
 		glActiveTexture(GL_TEXTURE3);
 		glBindTexture(GL_TEXTURE_2D, textureCaminoID);
-		std::cout << "B" << std::endl; 
+		//std::cout << "B" << std::endl; 
 		shaderTerrain.setInt("bTexture", 3);
 		glActiveTexture(GL_TEXTURE4);
 
 		glBindTexture(GL_TEXTURE_2D, textureBlendMapID);
 		shaderTerrain.setInt("blendMapTexture", 4);
-		//shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(80, 80)));
+		shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(80, 80)));
 		terrain.setPosition(glm::vec3(100, 0, 100));
 		terrain.render();
 		//std::cout << "blendmap" << std::endl; 
-		//shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0, 0)));
-		//glBindTexture(GL_TEXTURE_2D, 0);
+		shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0, 0)));
+		glBindTexture(GL_TEXTURE_2D, 0);
 		//std::cout << "blendmap fin" << std::endl; 
 
 		/*******************************************
@@ -501,25 +501,25 @@ void applicationLoop() {
 		modelMatrixPepsimanBody = glm::scale(modelMatrixPepsimanBody, glm::vec3(0.009f));
 		pepsiman.setAnimationIndex(0);
 		//pepsiman.enableWireMode();
-		//pepsiman.render(modelMatrixPepsimanBody);
-		//pepsiman.enableFillMode();
+		pepsiman.render(modelMatrixPepsimanBody);
+		pepsiman.enableFillMode();
 	
-		// std::cout << "SKYBOX" << std::endl;
-		// /*******************************************
-		//  * Skybox
-		//  *******************************************/
-		// GLint oldCullFaceMode;
-		// GLint oldDepthFuncMode;
-		// // deshabilita el modo del recorte de caras ocultas para ver las esfera desde adentro
-		// glGetIntegerv(GL_CULL_FACE_MODE, &oldCullFaceMode);
-		// glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFuncMode);
-		// shaderSkybox.setFloat("skybox", 0);
-		// glCullFace(GL_FRONT);
-		// glDepthFunc(GL_LEQUAL);
-		// glActiveTexture(GL_TEXTURE0);
-		// skyboxSphere.render();
-		// glCullFace(oldCullFaceMode);
-		// glDepthFunc(oldDepthFuncMode);
+		std::cout << "SKYBOX" << std::endl;
+		/*******************************************
+		 * Skybox
+		 *******************************************/
+		GLint oldCullFaceMode;
+		GLint oldDepthFuncMode;
+		// deshabilita el modo del recorte de caras ocultas para ver las esfera desde adentro
+		glGetIntegerv(GL_CULL_FACE_MODE, &oldCullFaceMode);
+		glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFuncMode);
+		shaderSkybox.setFloat("skybox", 0);
+		glCullFace(GL_FRONT);
+		glDepthFunc(GL_LEQUAL);
+		glActiveTexture(GL_TEXTURE0);
+		skyboxSphere.render();
+		glCullFace(oldCullFaceMode);
+		glDepthFunc(oldDepthFuncMode);
 
 		glfwSwapBuffers(window);
 	}
@@ -527,7 +527,6 @@ void applicationLoop() {
 
 int main(int argc, char **argv) {
 	init(800, 700, "Window GLFW", false);
-	
 	applicationLoop();
 	destroy();
 	return 1;
