@@ -55,13 +55,17 @@ Shader shaderTerrain;
 
 //std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
 
-std::shared_ptr<Camera> tp_camera(new ThirdPersonCamera());
-std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
+std::shared_ptr<Camera> camera(new ThirdPersonCamera());
+std::shared_ptr<Camera> fp_camera(new FirstPersonCamera());
+bool first_person_camera;
+
+float distanceFromPlayer = 6.5; //Distancia incial de camara al personaje
+float angleTarget = -90; //Angulo inical de la cámara
+glm::vec3 positionTarget;
 
 
 
 Sphere skyboxSphere(20, 20);
-Model pepsiman;
 Model goyo;
 // Terrain model instance
 Terrain terrain(-1, -1, 1000, 8, "../Textures/echoesHeightMap.png");
@@ -89,8 +93,14 @@ int lastMousePosX, offsetX = 0;
 int lastMousePosY, offsetY = 0;
 
 // Model matrix definitions
-glm::mat4 modelMatrixPepsiman = glm::mat4(1.0f);
 glm::mat4 modelMatrixGoyo = glm::mat4(1.0f);
+
+// Animation variables
+int animationGoyoIndex = 2;
+
+
+//Toggle 
+bool ctrl_Y_Toogle = false;
 
 double deltaTime;
 double currTime, lastTime;
@@ -99,6 +109,7 @@ double currTime, lastTime;
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes);
 void keyCallback(GLFWwindow *window, int key, int scancode, int action,
 		int mode);
+void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
 void mouseCallback(GLFWwindow *window, double xpos, double ypos);
 void mouseButtonCallback(GLFWwindow *window, int button, int state, int mod);
 void init(int width, int height, std::string strTitle, bool bFullScreen);
@@ -168,9 +179,6 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	skyboxSphere.setShader(&shaderSkybox);
 	skyboxSphere.setScale(glm::vec3(20.0f, 20.0f, 20.0f));
 
-	//Pepissman
-	pepsiman.loadModel("../models/Pepsiman/dance.fbx");
-	pepsiman.setShader(&shaderMulLighting);
 
 	//GOYO
 	goyo.loadModel("../models/Goyo/Goyo.fbx");
@@ -181,7 +189,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	terrain.setShader(&shaderTerrain);
 
 	camera->setPosition(glm::vec3(0.0, 3.0, 4.0));
-	
+	fp_camera ->setPosition(glm::vec3(modelMatrixGoyo[3])+glm::vec3(0.0f,1.8f,0.0f));
+
+
+
 	// Carga de texturas para el skybox
 	Texture skyboxTexture = Texture("");
 	glGenTextures(1, &skyboxTextureID);
@@ -324,7 +335,6 @@ void destroy() {
 
 	// Basic objects Delete
 	skyboxSphere.destroy();
-	pepsiman.destroy();
 	goyo.destroy();
 
 	// Terrains objects Delete
@@ -341,6 +351,11 @@ void destroy() {
 	// Cube Maps Delete
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	glDeleteTextures(1, &skyboxTextureID);
+}
+
+void scrollCallbak(GLFWwindow *window, double xoffset, double yoffset){
+	distanceFromPlayer -= yoffset;
+	camera->setDistanceFromTarget(distanceFromPlayer);
 }
 
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes) {
@@ -389,18 +404,53 @@ bool processInput(bool continueApplication) {
 		return false;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera->moveFrontCamera(true, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera->moveFrontCamera(false, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera->moveRightCamera(false, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera->moveRightCamera(true, deltaTime);
+
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		camera->mouseMoveCamera(offsetX, offsetY, deltaTime);
 	offsetX = 0;
 	offsetY = 0;
+
+	if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS){
+		camera->mouseMoveCamera(offsetX,0.0,deltaTime);
+		//fp_cam->mouseMoveCamera(offsetX,offsetY,deltaTime);	
+	}
+	if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS)
+		camera->mouseMoveCamera(0.0,offsetY,deltaTime);
+	offsetX = 0;
+	offsetY = 0;
+
+	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS){
+		//std::cout << "CTRL PRESSED " << std::endl;
+		if(glfwGetKey(window,GLFW_KEY_K)==GLFW_PRESS && !ctrl_Y_Toogle){
+			std::cout << "First person camera: " << first_person_camera << std::endl; 
+			first_person_camera = !first_person_camera;
+			ctrl_Y_Toogle = true;
+		}
+	}
+	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL)==GLFW_RELEASE || glfwGetKey(window,GLFW_KEY_K)==GLFW_RELEASE)
+		ctrl_Y_Toogle = false;
+
+	//************************* */
+	//Controles Goyo
+	//************************* */
+	if(glfwGetKey(window,GLFW_KEY_A)== GLFW_PRESS){
+		modelMatrixGoyo = glm::rotate(modelMatrixGoyo,0.04f,glm::vec3(0,1,0));
+		angleTarget += 0.04f;
+		fp_camera->mouseMoveCamera(-3,0,deltaTime);
+	}else if(glfwGetKey(window,GLFW_KEY_D)== GLFW_PRESS){
+		modelMatrixGoyo = glm::rotate(modelMatrixGoyo,-0.04f,glm::vec3(0,1,0));
+		angleTarget -= 0.04f;
+		fp_camera->mouseMoveCamera(3,0,deltaTime);
+	}
+	if(glfwGetKey(window,GLFW_KEY_W)== GLFW_PRESS){
+		modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(0.15f,0,0));
+		animationGoyoIndex = 3;
+		
+	}else if(glfwGetKey(window,GLFW_KEY_S)== GLFW_PRESS){
+		modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(-0.15f,0,0));
+		animationGoyoIndex = 3;
+	}
+
 
 
 	glfwPollEvents();
@@ -410,8 +460,6 @@ bool processInput(bool continueApplication) {
 void applicationLoop() {
 	bool psi = true;
 
-	modelMatrixPepsiman = glm::translate(modelMatrixPepsiman, glm::vec3(5.0f, 0.05, 0.0f));
-	
 
 	// Variables to interpolation key frames
 	lastTime = TimeManager::Instance().GetTime();
@@ -426,7 +474,6 @@ void applicationLoop() {
 		TimeManager::Instance().CalculateFrameRate(true);
 		deltaTime = TimeManager::Instance().DeltaTime;
 		psi = processInput(true);
-
 		// Variables donde se guardan las matrices de cada articulacion por 1 frame
 		std::vector<float> matrixDartJoints;
 		std::vector<glm::mat4> matrixDart;
@@ -436,7 +483,20 @@ void applicationLoop() {
 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 				(float) screenWidth / (float) screenHeight, 0.01f, 100.0f);
-		glm::mat4 view = camera->getViewMatrix();
+		camera->setSensitivity(1.2);
+		camera->setDistanceFromTarget(distanceFromPlayer);
+		positionTarget = modelMatrixGoyo[3]+glm::vec4(0.0f,2.0f,0.0f,0.0f);
+		camera->setCameraTarget(positionTarget);
+		camera->setAngleTarget(angleTarget);
+		camera->updateCamera();
+		fp_camera->setPosition(glm::vec3(modelMatrixGoyo[3])+glm::vec3(0.0f,3.5f,0.0f));
+
+		glm::mat4 view = glm::mat4(1.0f);
+		if(first_person_camera)
+			view = fp_camera->getViewMatrix();
+		else
+			view = camera->getViewMatrix();
+
 
 		// Settea la matriz de vista y projection al shader con solo color
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
@@ -518,21 +578,15 @@ void applicationLoop() {
 		 * Custom objects obj
 		 *******************************************/
 
-		modelMatrixPepsiman[3][1] = terrain.getHeightTerrain(modelMatrixPepsiman[3][0], modelMatrixPepsiman[3][2]);
-		glm::mat4 modelMatrixPepsimanBody = glm::mat4(modelMatrixPepsiman);
-		modelMatrixPepsimanBody = glm::scale(modelMatrixPepsimanBody, glm::vec3(0.009f));
-		pepsiman.setAnimationIndex(0);
-		//pepsiman.enableWireMode();
-		pepsiman.render(modelMatrixPepsimanBody);
-		pepsiman.enableFillMode();
 
 		//Goyo
-		modelMatrixGoyo[3][1] = terrain.getHeightTerrain(modelMatrixGoyo[3][0], modelMatrixGoyo[3][2]);
 		glm::mat4 modelMatrixGoyoBody = glm::mat4(modelMatrixGoyo);
 		modelMatrixGoyoBody = glm::scale(modelMatrixGoyoBody, glm::vec3(0.0009f));
-		goyo.setAnimationIndex(2);
+		goyo.setAnimationIndex(animationGoyoIndex);
+		modelMatrixGoyo[3][1] = terrain.getHeightTerrain(modelMatrixGoyo[3][0], modelMatrixGoyo[3][2]);
 		goyo.render(modelMatrixGoyoBody);
-		pepsiman.enableFillMode(); 
+		animationGoyoIndex = 0;
+		
 
 
 
