@@ -21,6 +21,7 @@
 #include "Headers/Cylinder.h"
 #include "Headers/Box.h"
 #include "Headers/FirstPersonCamera.h"
+#include "Headers/ThirdPersonCamera.h"
 
 //GLM include
 #define GLM_FORCE_RADIANS
@@ -52,11 +53,16 @@ Shader shaderSkybox;
 Shader shaderMulLighting;
 Shader shaderTerrain;
 
+//std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
+
+std::shared_ptr<Camera> tp_camera(new ThirdPersonCamera());
 std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
+
 
 
 Sphere skyboxSphere(20, 20);
 Model pepsiman;
+Model goyo;
 // Terrain model instance
 Terrain terrain(-1, -1, 1000, 8, "../Textures/echoesHeightMap.png");
 
@@ -84,6 +90,7 @@ int lastMousePosY, offsetY = 0;
 
 // Model matrix definitions
 glm::mat4 modelMatrixPepsiman = glm::mat4(1.0f);
+glm::mat4 modelMatrixGoyo = glm::mat4(1.0f);
 
 double deltaTime;
 double currTime, lastTime;
@@ -164,6 +171,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//Pepissman
 	pepsiman.loadModel("../models/Pepsiman/dance.fbx");
 	pepsiman.setShader(&shaderMulLighting);
+
+	//GOYO
+	goyo.loadModel("../models/Goyo/Goyo.fbx");
+	goyo.setShader(&shaderMulLighting);
 
 	// Terreno
 	terrain.init();
@@ -314,6 +325,7 @@ void destroy() {
 	// Basic objects Delete
 	skyboxSphere.destroy();
 	pepsiman.destroy();
+	goyo.destroy();
 
 	// Terrains objects Delete
 	terrain.destroy();
@@ -399,6 +411,7 @@ void applicationLoop() {
 	bool psi = true;
 
 	modelMatrixPepsiman = glm::translate(modelMatrixPepsiman, glm::vec3(5.0f, 0.05, 0.0f));
+	
 
 	// Variables to interpolation key frames
 	lastTime = TimeManager::Instance().GetTime();
@@ -512,6 +525,16 @@ void applicationLoop() {
 		//pepsiman.enableWireMode();
 		pepsiman.render(modelMatrixPepsimanBody);
 		pepsiman.enableFillMode();
+
+		//Goyo
+		modelMatrixGoyo[3][1] = terrain.getHeightTerrain(modelMatrixGoyo[3][0], modelMatrixGoyo[3][2]);
+		glm::mat4 modelMatrixGoyoBody = glm::mat4(modelMatrixGoyo);
+		modelMatrixGoyoBody = glm::scale(modelMatrixGoyoBody, glm::vec3(0.0009f));
+		goyo.setAnimationIndex(2);
+		goyo.render(modelMatrixGoyoBody);
+		pepsiman.enableFillMode(); 
+
+
 
 		/*******************************************
 		 * Skybox
