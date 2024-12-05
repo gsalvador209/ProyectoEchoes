@@ -53,22 +53,29 @@ Shader shaderSkybox;
 Shader shaderMulLighting;
 Shader shaderTerrain;
 
-//std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
-
 std::shared_ptr<Camera> camera(new ThirdPersonCamera());
 std::shared_ptr<Camera> fp_camera(new FirstPersonCamera());
 bool first_person_camera;
 
+// Variables para la camara y controles
 float distanceFromPlayer = 6.5; //Distancia incial de camara al personaje
-float angleTarget = -90; //Angulo inical de la cámara
+float angleTarget = 90; //Angulo inical de la cámara
 glm::vec3 positionTarget;
-
+bool ctrl_Y_Toogle = false;
+float velocity = 0.07f;
+float runVelocity = 0.12f;
+bool isJump = false;
+float GRAVITY = 5;
+double tmv = 0;
+double startTimeJump = 0;
 
 
 Sphere skyboxSphere(20, 20);
 Model goyo;
+Model islas;
+
 // Terrain model instance
-Terrain terrain(-1, -1, 1000, 8, "../Textures/echoesHeightMap.png");
+Terrain terrain(-1, -1, 200, 2, "../Textures/echoesHeightMap.png");
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
 GLuint skyboxTextureID;
@@ -94,13 +101,19 @@ int lastMousePosY, offsetY = 0;
 
 // Model matrix definitions
 glm::mat4 modelMatrixGoyo = glm::mat4(1.0f);
+glm::mat4 modelMatrixIslas = glm::mat4(1.0f);
 
 // Animation variables
-int animationGoyoIndex = 2;
+int animationGoyoIndex = 0;
+/*
+2 .- Idle
+3 .- Walk
+4 .- Jump
+5 .- Run
 
 
-//Toggle 
-bool ctrl_Y_Toogle = false;
+*/
+
 
 double deltaTime;
 double currTime, lastTime;
@@ -153,6 +166,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetScrollCallback(window,scrollCallback);
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	// Init glew
@@ -183,6 +197,14 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//GOYO
 	goyo.loadModel("../models/Goyo/Goyo.fbx");
 	goyo.setShader(&shaderMulLighting);
+
+	//ISLAS
+	islas.loadModel("../models/Islas/Islas.fbx");
+	islas.setShader(&shaderMulLighting);
+	
+	modelMatrixIslas = glm::rotate(modelMatrixIslas,glm::radians(-90.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0f, 19.0f, 0.0f));
+	modelMatrixIslas = glm::scale(modelMatrixIslas, glm::vec3(0.35f, 0.63f, 0.8f));
 
 	// Terreno
 	terrain.init();
@@ -336,6 +358,7 @@ void destroy() {
 	// Basic objects Delete
 	skyboxSphere.destroy();
 	goyo.destroy();
+	islas.destroy();
 
 	// Terrains objects Delete
 	terrain.destroy();
@@ -353,10 +376,6 @@ void destroy() {
 	glDeleteTextures(1, &skyboxTextureID);
 }
 
-void scrollCallbak(GLFWwindow *window, double xoffset, double yoffset){
-	distanceFromPlayer -= yoffset;
-	camera->setDistanceFromTarget(distanceFromPlayer);
-}
 
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes) {
 	screenWidth = widthRes;
@@ -381,6 +400,12 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
 	lastMousePosX = xpos;
 	lastMousePosY = ypos;
 }
+
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset){
+	distanceFromPlayer -= yoffset;
+	camera->setDistanceFromTarget(distanceFromPlayer);
+}
+
 
 void mouseButtonCallback(GLFWwindow *window, int button, int state, int mod) {
 	if (state == GLFW_PRESS) {
@@ -433,6 +458,16 @@ bool processInput(bool continueApplication) {
 	//************************* */
 	//Controles Goyo
 	//************************* */
+	if(!isJump && (window,GLFW_KEY_SPACE)== GLFW_PRESS && animationGoyoIndex != 9){
+		isJump = true;
+		tmv = 0;
+		startTimeJump = currTime;
+		if ((glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS)&&(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)) {
+			animationGoyoIndex = 11;
+		}else{
+			animationGoyoIndex = 9;
+		}//return continueApplication;
+	}
 	if(glfwGetKey(window,GLFW_KEY_A)== GLFW_PRESS){
 		modelMatrixGoyo = glm::rotate(modelMatrixGoyo,0.04f,glm::vec3(0,1,0));
 		angleTarget += 0.04f;
@@ -443,15 +478,28 @@ bool processInput(bool continueApplication) {
 		fp_camera->mouseMoveCamera(3,0,deltaTime);
 	}
 	if(glfwGetKey(window,GLFW_KEY_W)== GLFW_PRESS){
-		modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(0.15f,0,0));
-		animationGoyoIndex = 3;
-		
+		if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS){
+			modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(runVelocity,0,0));
+			if (glfwGetKey(window,GLFW_KEY_SPACE)== GLFW_PRESS){
+				animationGoyoIndex = 11;
+			}else if(animationGoyoIndex != 11){
+				animationGoyoIndex = 5;
+			}
+		}else{
+			modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(velocity,0,0));
+			animationGoyoIndex = 3;
+		}
 	}else if(glfwGetKey(window,GLFW_KEY_S)== GLFW_PRESS){
-		modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(-0.15f,0,0));
+		modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(-velocity,0,0));
 		animationGoyoIndex = 3;
 	}
 
-
+	bool keySpaceStatus = glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS;
+	if(keySpaceStatus && !isJump){
+		isJump = true;
+		startTimeJump = currTime;
+		tmv = 0; 
+	}
 
 	glfwPollEvents();
 	return continueApplication;
@@ -580,13 +628,26 @@ void applicationLoop() {
 
 
 		//Goyo
+		float z_goyo = terrain.getHeightTerrain(modelMatrixGoyo[3][0], modelMatrixGoyo[3][2]);	
 		glm::mat4 modelMatrixGoyoBody = glm::mat4(modelMatrixGoyo);
-		modelMatrixGoyoBody = glm::scale(modelMatrixGoyoBody, glm::vec3(0.0009f));
+		modelMatrixGoyoBody = glm::scale(modelMatrixGoyoBody, glm::vec3(0.001f));
+		modelMatrixGoyo[3][1] = z_goyo;
+		modelMatrixGoyo[3][1] = -GRAVITY*tmv*tmv + 4*tmv + z_goyo;
+		tmv = currTime-startTimeJump;
 		goyo.setAnimationIndex(animationGoyoIndex);
-		modelMatrixGoyo[3][1] = terrain.getHeightTerrain(modelMatrixGoyo[3][0], modelMatrixGoyo[3][2]);
-		goyo.render(modelMatrixGoyoBody);
-		animationGoyoIndex = 0;
 		
+		if(modelMatrixGoyo[3][1] < z_goyo){
+			modelMatrixGoyo[3][1] = z_goyo;
+			isJump = false;
+			animationGoyoIndex = 2;
+		}else{
+			animationGoyoIndex = 9;
+		}
+		goyo.render(modelMatrixGoyoBody);
+		
+		//Islas
+		modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0, 0.0, 0.0));
+		islas.render(modelMatrixIslas);
 
 
 
