@@ -39,7 +39,18 @@
 
 #include "Headers/AnimationUtils.h"
 
+#include "Headers/Colisiones.h"
+
 #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
+
+
+	//TODO: 
+	//1. Crear collisiones invisibles para deteccción de objetos cercanos a recoger
+	//2. Crear collisiones para bordes de terreno
+	//3. Crear collisiones para Goyo
+	//4. Crear collisiones para elementos de la escena como arboles
+	//5. Reempaquetar las colisiones en una sola función
+	//6. Corregir botón WASD para que avance siempre en dirección de la cámara
 
 int screenWidth;
 int screenHeight;
@@ -53,9 +64,15 @@ Shader shaderSkybox;
 Shader shaderMulLighting;
 Shader shaderTerrain;
 
+// Variables para la camara
 std::shared_ptr<Camera> camera(new ThirdPersonCamera());
 std::shared_ptr<Camera> fp_camera(new FirstPersonCamera());
 bool first_person_camera;
+
+//Variables para coliiones
+//tag, (collider, transform t_n, transform t_n-1)
+std::map<std::string, std::tuple<AbstractModel::SBB,glm::mat4, glm::mat4>> collidersSBB;
+std::map<std::string, std::tuple<AbstractModel::OBB,glm::mat4, glm::mat4>> collidersOBB;	
 
 // Variables para la camara y controles
 float distanceFromPlayer = 6.5; //Distancia incial de camara al personaje
@@ -69,8 +86,10 @@ float GRAVITY = 5;
 double tmv = 0;
 double startTimeJump = 0;
 
-
+//Declaracion de los objetos geometricos
 Sphere skyboxSphere(20, 20);
+Box boxCollider;
+Sphere modelSphereCollider(10, 10);
 Model goyo;
 Model islas;
 
@@ -110,8 +129,6 @@ int animationGoyoIndex = 0;
 3 .- Walk
 4 .- Jump
 5 .- Run
-
-
 */
 
 
@@ -188,11 +205,22 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	shaderSkybox.initialize("../Shaders/skyBox.vs", "../Shaders/skyBox.fs");
 	shaderMulLighting.initialize("../Shaders/iluminacion_textura_animation.vs", "../Shaders/multipleLights.fs");\
 	shaderTerrain.initialize("../Shaders/terrain.vs", "../Shaders/terrain.fs");
+	
+	
 	// Inicializacion de los objetos.
+	// Skybox
 	skyboxSphere.init();
 	skyboxSphere.setShader(&shaderSkybox);
 	skyboxSphere.setScale(glm::vec3(20.0f, 20.0f, 20.0f));
 
+	//Box collider
+	boxCollider.init();
+	boxCollider.setShader(&shader);
+	boxCollider.setColor(glm::vec4(0.0f,1.0f, 1.0f, 1.0f));
+
+	modelSphereCollider.init();
+	modelSphereCollider.setShader(&shader);
+	modelSphereCollider.setColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 
 	//GOYO
 	goyo.loadModel("../models/Goyo/Goyo.fbx");
@@ -522,13 +550,11 @@ void applicationLoop() {
 		TimeManager::Instance().CalculateFrameRate(true);
 		deltaTime = TimeManager::Instance().DeltaTime;
 		psi = processInput(true);
-		// Variables donde se guardan las matrices de cada articulacion por 1 frame
-		std::vector<float> matrixDartJoints;
-		std::vector<glm::mat4> matrixDart;
-		std::vector<float> matrixBuzzJoints;
-		std::vector<glm::mat4> matrixBuzz;
+		std::map<std::string,bool> collisionDetection;
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		//Configuración de perspectiva y camara 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 				(float) screenWidth / (float) screenHeight, 0.01f, 100.0f);
 		camera->setSensitivity(1.2);
@@ -544,7 +570,6 @@ void applicationLoop() {
 			view = fp_camera->getViewMatrix();
 		else
 			view = camera->getViewMatrix();
-
 
 		// Settea la matriz de vista y projection al shader con solo color
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
@@ -564,7 +589,6 @@ void applicationLoop() {
 				glm::value_ptr(projection));
 		shaderTerrain.setMatrix4("view", 1, false,glm::value_ptr(view));
 
-		//
 
 		/*******************************************
 		 * Propiedades Luz direccional
@@ -667,6 +691,53 @@ void applicationLoop() {
 		glCullFace(oldCullFaceMode);
 		glDepthFunc(oldDepthFuncMode);
 
+
+		//Pruebas de collision
+		auto itOBBC = collidersOBB.begin();
+		for( ; itOBBC != collidersOBB.end(); itOBBC++){
+			bool isCollision = false;
+			auto jtOBBC = collidersOBB.begin();
+			for(; jtOBBC != collidersOBB.end(); jtOBBC++){
+				if(itOBBC != jtOBBC && testOBBOBB(std::get<0>(itOBBC->second),std::get<0>(jtOBBC->second))){
+					std::cout << "Colision entre " << itOBBC->first << " y " << jtOBBC->first << std::endl;	
+					isCollision = true;
+					addOrUpdateCollisionDetection(collisionDetection,itOBBC->first,isCollision);	
+				}
+			}
+			addOrUpdateCollisionDetection(collisionDetection,itOBBC->first,isCollision);
+		}
+
+		//Cajas vs esferas		
+		//Caja contra caja
+		itOBBC = collidersOBB.begin();
+		for( ; itOBBC != collidersOBB.end() ; itOBBC++){
+			bool isCollision = false;
+			auto itSBBC = collidersSBB.begin();
+			for(;itSBBC!=collidersSBB.end();itSBBC++){
+				if(testSphereOBox(std::get<0>(itSBBC->second),std::get<0>(itOBBC->second))){
+					std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
+					isCollision = true;
+					addOrUpdateCollisionDetection(collisionDetection,itSBBC->first,true);
+				}
+			}
+			addOrUpdateCollisionDetection(collisionDetection,itOBBC->first,isCollision);
+		}
+
+		// ESFERA CONTRA ESFERA
+		auto itSBBC = collidersSBB.begin();
+		for(;itSBBC!=collidersSBB.end();itSBBC++){
+			auto jtSBBC = collidersSBB.begin();
+			bool isCollision = false;
+			for(;jtSBBC!=collidersSBB.end();jtSBBC++){
+				if(itSBBC != jtSBBC && testSphereSphereIntersection(
+					std::get<0>(itSBBC->second),std::get<0>(jtSBBC->second))){
+						std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
+						isCollision = true;
+						addOrUpdateCollisionDetection(collisionDetection,jtSBBC->first,true);
+				}
+				addOrUpdateCollisionDetection(collisionDetection,itSBBC->first,isCollision);
+			}
+		}
 		
 		glfwSwapBuffers(window);
 	}
