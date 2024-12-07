@@ -66,13 +66,13 @@ vec3 calculateDirectionalLight(Light light, vec3 direction){
     vec3 diffuse  = light.diffuse * (diff * vec3(texture(texture1, our_uv)));
     
     // Specular
-    float specularStrength = 0.5f;
+    float specularStrength = 0.01f;
     vec3 viewDir = normalize(viewPos - fragPos);
     vec3 reflectDir = reflect(-lightDir, normal);  
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
     vec3 specular = light.specular * (spec * vec3(texture(texture1, our_uv)));  
         
-    return (ambient + diffuse + specular);
+    return (ambient + diffuse);
 }
 
 vec3 calculatePointLights(){

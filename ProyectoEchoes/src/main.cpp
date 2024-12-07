@@ -21,6 +21,7 @@
 #include "Headers/Cylinder.h"
 #include "Headers/Box.h"
 #include "Headers/FirstPersonCamera.h"
+#include "Headers/ThirdPersonCamera.h"
 
 //GLM include
 #define GLM_FORCE_RADIANS
@@ -38,7 +39,18 @@
 
 #include "Headers/AnimationUtils.h"
 
+#include "Headers/Colisiones.h"
+
 #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
+
+
+	//TODO: 
+	//1. Crear collisiones invisibles para deteccción de objetos cercanos a recoger
+	//2. Crear collisiones para bordes de terreno
+	//3. Crear collisiones para Goyo
+	//4. Crear collisiones para elementos de la escena como arboles
+	//5. Reempaquetar las colisiones en una sola función
+	//6. Corregir botón WASD para que avance siempre en dirección de la cámara
 
 int screenWidth;
 int screenHeight;
@@ -52,13 +64,38 @@ Shader shaderSkybox;
 Shader shaderMulLighting;
 Shader shaderTerrain;
 
-std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
+// Variables para la camara
+std::shared_ptr<Camera> camera(new ThirdPersonCamera());
+std::shared_ptr<Camera> fp_camera(new FirstPersonCamera());
+bool first_person_camera;
 
+//Variables para coliiones
+//tag, (collider, transform t_n, transform t_n-1)
+std::map<std::string, std::tuple<AbstractModel::SBB,glm::mat4, glm::mat4>> collidersSBB;
+std::map<std::string, std::tuple<AbstractModel::OBB,glm::mat4, glm::mat4>> collidersOBB;	
 
+// Variables para la camara y controles
+float distanceFromPlayer = 6.5; //Distancia incial de camara al personaje
+float angleTarget = 90; //Angulo inical de la cámara
+glm::vec3 positionTarget;
+bool ctrl_Y_Toogle = false;
+float velocity = 0.07f;
+float runVelocity = 0.12f;
+bool isJump = false;
+float GRAVITY = 5;
+double tmv = 0;
+double startTimeJump = 0;
+
+//Declaracion de los objetos geometricos
 Sphere skyboxSphere(20, 20);
-Model pepsiman;
+Box boxCollider;
+Sphere modelSphereCollider(10, 10);
+Model goyo;
+Model islas;
+
 // Terrain model instance
 Terrain terrain(-1, -1, 100, 8, "../Textures/echoesHeightMap.png");
+
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
 GLuint skyboxTextureID;
@@ -83,7 +120,18 @@ int lastMousePosX, offsetX = 0;
 int lastMousePosY, offsetY = 0;
 
 // Model matrix definitions
-glm::mat4 modelMatrixPepsiman = glm::mat4(1.0f);
+glm::mat4 modelMatrixGoyo = glm::mat4(1.0f);
+glm::mat4 modelMatrixIslas = glm::mat4(1.0f);
+
+// Animation variables
+int animationGoyoIndex = 0;
+/*
+2 .- Idle
+3 .- Walk
+4 .- Jump
+5 .- Run
+*/
+
 
 double deltaTime;
 double currTime, lastTime;
@@ -92,6 +140,7 @@ double currTime, lastTime;
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes);
 void keyCallback(GLFWwindow *window, int key, int scancode, int action,
 		int mode);
+void scrollCallback(GLFWwindow *window, double xoffset, double yoffset);
 void mouseCallback(GLFWwindow *window, double xpos, double ypos);
 void mouseButtonCallback(GLFWwindow *window, int button, int state, int mod);
 void init(int width, int height, std::string strTitle, bool bFullScreen);
@@ -135,6 +184,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetMouseButtonCallback(window, mouseButtonCallback);
+	glfwSetScrollCallback(window,scrollCallback);
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
 
 	// Init glew
@@ -156,21 +206,44 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	shaderSkybox.initialize("../Shaders/skyBox.vs", "../Shaders/skyBox.fs");
 	shaderMulLighting.initialize("../Shaders/iluminacion_textura_animation.vs", "../Shaders/multipleLights.fs");\
 	shaderTerrain.initialize("../Shaders/terrain.vs", "../Shaders/terrain.fs");
+	
+	
 	// Inicializacion de los objetos.
+	// Skybox
 	skyboxSphere.init();
 	skyboxSphere.setShader(&shaderSkybox);
 	skyboxSphere.setScale(glm::vec3(20.0f, 20.0f, 20.0f));
 
-	//Pepissman
-	pepsiman.loadModel("../models/Pepsiman/dance.fbx");
-	pepsiman.setShader(&shaderMulLighting);
+	//Box collider
+	boxCollider.init();
+	boxCollider.setShader(&shader);
+	boxCollider.setColor(glm::vec4(0.0f,1.0f, 1.0f, 1.0f));
+
+	modelSphereCollider.init();
+	modelSphereCollider.setShader(&shader);
+	modelSphereCollider.setColor(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+
+	//GOYO
+	goyo.loadModel("../models/Goyo/Goyo.fbx");
+	goyo.setShader(&shaderMulLighting);
+
+	//ISLAS
+	islas.loadModel("../models/Islas/Islas.fbx");
+	islas.setShader(&shaderMulLighting);
+	
+	modelMatrixIslas = glm::rotate(modelMatrixIslas,glm::radians(-90.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+	modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0f, 19.0f, 0.0f));
+	modelMatrixIslas = glm::scale(modelMatrixIslas, glm::vec3(0.35f, 0.63f, 0.8f));
 
 	// Terreno
 	terrain.init();
 	terrain.setShader(&shaderTerrain);
 
 	camera->setPosition(glm::vec3(0.0, 3.0, 4.0));
-	
+	fp_camera ->setPosition(glm::vec3(modelMatrixGoyo[3])+glm::vec3(0.0f,1.8f,0.0f));
+
+
+
 	// Carga de texturas para el skybox
 	Texture skyboxTexture = Texture("");
 	glGenTextures(1, &skyboxTextureID);
@@ -313,7 +386,8 @@ void destroy() {
 
 	// Basic objects Delete
 	skyboxSphere.destroy();
-	pepsiman.destroy();
+	goyo.destroy();
+	islas.destroy();
 
 	// Terrains objects Delete
 	terrain.destroy();
@@ -330,6 +404,7 @@ void destroy() {
 	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 	glDeleteTextures(1, &skyboxTextureID);
 }
+
 
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes) {
 	screenWidth = widthRes;
@@ -355,6 +430,12 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
 	lastMousePosY = ypos;
 }
 
+void scrollCallback(GLFWwindow* window, double xoffset, double yoffset){
+	distanceFromPlayer -= yoffset;
+	camera->setDistanceFromTarget(distanceFromPlayer);
+}
+
+
 void mouseButtonCallback(GLFWwindow *window, int button, int state, int mod) {
 	if (state == GLFW_PRESS) {
 		switch (button) {
@@ -377,19 +458,77 @@ bool processInput(bool continueApplication) {
 		return false;
 	}
 
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera->moveFrontCamera(true, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera->moveFrontCamera(false, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera->moveRightCamera(false, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera->moveRightCamera(true, deltaTime);
+
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		camera->mouseMoveCamera(offsetX, offsetY, deltaTime);
 	offsetX = 0;
 	offsetY = 0;
 
+	if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS){
+		camera->mouseMoveCamera(offsetX,0.0,deltaTime);
+		//fp_cam->mouseMoveCamera(offsetX,offsetY,deltaTime);	
+	}
+	if(glfwGetMouseButton(window,GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS)
+		camera->mouseMoveCamera(0.0,offsetY,deltaTime);
+	offsetX = 0;
+	offsetY = 0;
+
+	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS){
+		//std::cout << "CTRL PRESSED " << std::endl;
+		if(glfwGetKey(window,GLFW_KEY_K)==GLFW_PRESS && !ctrl_Y_Toogle){
+			std::cout << "First person camera: " << first_person_camera << std::endl; 
+			first_person_camera = !first_person_camera;
+			ctrl_Y_Toogle = true;
+		}
+	}
+	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL)==GLFW_RELEASE || glfwGetKey(window,GLFW_KEY_K)==GLFW_RELEASE)
+		ctrl_Y_Toogle = false;
+
+	//************************* */
+	//Controles Goyo
+	//************************* */
+	if(!isJump && (window,GLFW_KEY_SPACE)== GLFW_PRESS && animationGoyoIndex != 9){
+		isJump = true;
+		tmv = 0;
+		startTimeJump = currTime;
+		if ((glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS)&&(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)) {
+			animationGoyoIndex = 11;
+		}else{
+			animationGoyoIndex = 9;
+		}//return continueApplication;
+	}
+	if(glfwGetKey(window,GLFW_KEY_A)== GLFW_PRESS){
+		modelMatrixGoyo = glm::rotate(modelMatrixGoyo,0.04f,glm::vec3(0,1,0));
+		angleTarget += 0.04f;
+		fp_camera->mouseMoveCamera(-3,0,deltaTime);
+	}else if(glfwGetKey(window,GLFW_KEY_D)== GLFW_PRESS){
+		modelMatrixGoyo = glm::rotate(modelMatrixGoyo,-0.04f,glm::vec3(0,1,0));
+		angleTarget -= 0.04f;
+		fp_camera->mouseMoveCamera(3,0,deltaTime);
+	}
+	if(glfwGetKey(window,GLFW_KEY_W)== GLFW_PRESS){
+		if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS){
+			modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(runVelocity,0,0));
+			if (glfwGetKey(window,GLFW_KEY_SPACE)== GLFW_PRESS){
+				animationGoyoIndex = 11;
+			}else if(animationGoyoIndex != 11){
+				animationGoyoIndex = 5;
+			}
+		}else{
+			modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(velocity,0,0));
+			animationGoyoIndex = 3;
+		}
+	}else if(glfwGetKey(window,GLFW_KEY_S)== GLFW_PRESS){
+		modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(-velocity,0,0));
+		animationGoyoIndex = 3;
+	}
+
+	bool keySpaceStatus = glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS;
+	if(keySpaceStatus && !isJump){
+		isJump = true;
+		startTimeJump = currTime;
+		tmv = 0; 
+	}
 
 	glfwPollEvents();
 	return continueApplication;
@@ -398,7 +537,6 @@ bool processInput(bool continueApplication) {
 void applicationLoop() {
 	bool psi = true;
 
-	modelMatrixPepsiman = glm::translate(modelMatrixPepsiman, glm::vec3(5.0f, 0.05, 0.0f));
 
 	// Variables to interpolation key frames
 	lastTime = TimeManager::Instance().GetTime();
@@ -413,17 +551,26 @@ void applicationLoop() {
 		TimeManager::Instance().CalculateFrameRate(true);
 		deltaTime = TimeManager::Instance().DeltaTime;
 		psi = processInput(true);
+		std::map<std::string,bool> collisionDetection;
 
-		// Variables donde se guardan las matrices de cada articulacion por 1 frame
-		std::vector<float> matrixDartJoints;
-		std::vector<glm::mat4> matrixDart;
-		std::vector<float> matrixBuzzJoints;
-		std::vector<glm::mat4> matrixBuzz;
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		//Configuración de perspectiva y camara 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 				(float) screenWidth / (float) screenHeight, 0.01f, 100.0f);
-		glm::mat4 view = camera->getViewMatrix();
+		camera->setSensitivity(1.2);
+		camera->setDistanceFromTarget(distanceFromPlayer);
+		positionTarget = modelMatrixGoyo[3]+glm::vec4(0.0f,2.0f,0.0f,0.0f);
+		camera->setCameraTarget(positionTarget);
+		camera->setAngleTarget(angleTarget);
+		camera->updateCamera();
+		fp_camera->setPosition(glm::vec3(modelMatrixGoyo[3])+glm::vec3(0.0f,3.5f,0.0f));
+
+		glm::mat4 view = glm::mat4(1.0f);
+		if(first_person_camera)
+			view = fp_camera->getViewMatrix();
+		else
+			view = camera->getViewMatrix();
 
 		// Settea la matriz de vista y projection al shader con solo color
 		shader.setMatrix4("projection", 1, false, glm::value_ptr(projection));
@@ -443,7 +590,6 @@ void applicationLoop() {
 				glm::value_ptr(projection));
 		shaderTerrain.setMatrix4("view", 1, false,glm::value_ptr(view));
 
-		//
 
 		/*******************************************
 		 * Propiedades Luz direccional
@@ -505,13 +651,30 @@ void applicationLoop() {
 		 * Custom objects obj
 		 *******************************************/
 
-		modelMatrixPepsiman[3][1] = terrain.getHeightTerrain(modelMatrixPepsiman[3][0], modelMatrixPepsiman[3][2]);
-		glm::mat4 modelMatrixPepsimanBody = glm::mat4(modelMatrixPepsiman);
-		modelMatrixPepsimanBody = glm::scale(modelMatrixPepsimanBody, glm::vec3(0.009f));
-		pepsiman.setAnimationIndex(0);
-		//pepsiman.enableWireMode();
-		pepsiman.render(modelMatrixPepsimanBody);
-		pepsiman.enableFillMode();
+
+		//Goyo
+		float z_goyo = terrain.getHeightTerrain(modelMatrixGoyo[3][0], modelMatrixGoyo[3][2]);	
+		glm::mat4 modelMatrixGoyoBody = glm::mat4(modelMatrixGoyo);
+		modelMatrixGoyoBody = glm::scale(modelMatrixGoyoBody, glm::vec3(0.001f));
+		modelMatrixGoyo[3][1] = z_goyo;
+		modelMatrixGoyo[3][1] = -GRAVITY*tmv*tmv + 4*tmv + z_goyo;
+		tmv = currTime-startTimeJump;
+		goyo.setAnimationIndex(animationGoyoIndex);
+		
+		if(modelMatrixGoyo[3][1] < z_goyo){
+			modelMatrixGoyo[3][1] = z_goyo;
+			isJump = false;
+			animationGoyoIndex = 2;
+		}else{
+			animationGoyoIndex = 9;
+		}
+		goyo.render(modelMatrixGoyoBody);
+		
+		//Islas
+		modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0, 0.0, 0.0));
+		islas.render(modelMatrixIslas);
+
+
 
 		/*******************************************
 		 * Skybox
@@ -529,6 +692,53 @@ void applicationLoop() {
 		glCullFace(oldCullFaceMode);
 		glDepthFunc(oldDepthFuncMode);
 
+
+		//Pruebas de collision
+		auto itOBBC = collidersOBB.begin();
+		for( ; itOBBC != collidersOBB.end(); itOBBC++){
+			bool isCollision = false;
+			auto jtOBBC = collidersOBB.begin();
+			for(; jtOBBC != collidersOBB.end(); jtOBBC++){
+				if(itOBBC != jtOBBC && testOBBOBB(std::get<0>(itOBBC->second),std::get<0>(jtOBBC->second))){
+					std::cout << "Colision entre " << itOBBC->first << " y " << jtOBBC->first << std::endl;	
+					isCollision = true;
+					addOrUpdateCollisionDetection(collisionDetection,itOBBC->first,isCollision);	
+				}
+			}
+			addOrUpdateCollisionDetection(collisionDetection,itOBBC->first,isCollision);
+		}
+
+		//Cajas vs esferas		
+		//Caja contra caja
+		itOBBC = collidersOBB.begin();
+		for( ; itOBBC != collidersOBB.end() ; itOBBC++){
+			bool isCollision = false;
+			auto itSBBC = collidersSBB.begin();
+			for(;itSBBC!=collidersSBB.end();itSBBC++){
+				if(testSphereOBox(std::get<0>(itSBBC->second),std::get<0>(itOBBC->second))){
+					std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
+					isCollision = true;
+					addOrUpdateCollisionDetection(collisionDetection,itSBBC->first,true);
+				}
+			}
+			addOrUpdateCollisionDetection(collisionDetection,itOBBC->first,isCollision);
+		}
+
+		// ESFERA CONTRA ESFERA
+		auto itSBBC = collidersSBB.begin();
+		for(;itSBBC!=collidersSBB.end();itSBBC++){
+			auto jtSBBC = collidersSBB.begin();
+			bool isCollision = false;
+			for(;jtSBBC!=collidersSBB.end();jtSBBC++){
+				if(itSBBC != jtSBBC && testSphereSphereIntersection(
+					std::get<0>(itSBBC->second),std::get<0>(jtSBBC->second))){
+						std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
+						isCollision = true;
+						addOrUpdateCollisionDetection(collisionDetection,jtSBBC->first,true);
+				}
+				addOrUpdateCollisionDetection(collisionDetection,itSBBC->first,isCollision);
+			}
+		}
 		
 		glfwSwapBuffers(window);
 	}
