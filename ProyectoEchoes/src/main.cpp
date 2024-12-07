@@ -58,7 +58,7 @@ std::shared_ptr<FirstPersonCamera> camera(new FirstPersonCamera());
 Sphere skyboxSphere(20, 20);
 Model pepsiman;
 // Terrain model instance
-Terrain terrain(-1, -1, 1000, 8, "../Textures/echoesHeightMap.png");
+Terrain terrain(-1, -1, 100, 8, "../Textures/echoesHeightMap.png");
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
 GLuint skyboxTextureID;
