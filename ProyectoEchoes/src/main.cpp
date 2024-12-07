@@ -94,7 +94,8 @@ Model goyo;
 Model islas;
 
 // Terrain model instance
-Terrain terrain(-1, -1, 200, 2, "../Textures/echoesHeightMap.png");
+Terrain terrain(-1, -1, 100, 8, "../Textures/echoesHeightMap.png");
+
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
 GLuint skyboxTextureID;
