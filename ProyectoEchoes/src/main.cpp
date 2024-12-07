@@ -108,7 +108,7 @@ Model islas;
 Model stage;
 
 // Terrain model instance
-Terrain terrain(-0.75, -0.75, 600, 4, "../Textures/echoesHeightMap.png");
+Terrain terrain(-0.75, -0.75, 600, 6, "../Textures/echoesHeightMap.png");
 
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
@@ -546,6 +546,7 @@ bool processInput(bool continueApplication) {
 		}else if(glfwGetKey(window,GLFW_KEY_S)==GLFW_RELEASE){
 			toogle_Save = true;
 			std::cout << "Model positions written to file" << std::endl;
+			writeModelPositionsToFile(modelsMapping);
 		}
 	}
 	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL)==GLFW_RELEASE)
@@ -782,7 +783,9 @@ void applicationLoop() {
 		islas.render(modelMatrixIslas);
 
 		//Stage
+		glDisable(GL_CULL_FACE);
 		stage.render(modelMatrixStage);
+		glEnable(GL_CULL_FACE);
 
 
 
