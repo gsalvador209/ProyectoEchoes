@@ -78,9 +78,11 @@ std::map<std::string, std::tuple<AbstractModel::OBB,glm::mat4, glm::mat4>> colli
 float distanceFromPlayer = 6.5; //Distancia incial de camara al personaje
 float angleTarget = 90; //Angulo inical de la cámara
 glm::vec3 positionTarget;
-bool ctrl_Y_Toogle = false;
+bool toogle_CRTL = true;
+bool toogle_K = true;
+bool toogle_Save = true;
 float velocity = 0.07f;
-float runVelocity = 0.12f;
+float runVelocity = 3.0f;
 bool isJump = false;
 float GRAVITY = 5;
 double tmv = 0;
@@ -276,7 +278,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	stage.loadModel("../models/Stage/Stage.fbx");
 	stage.setShader(&shaderMulLighting);
 	
-	// modelMatrixIslas = glm::rotate(modelMatrixIslas,glm::radians(-90.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+	 //modelMatrixIslas = glm::rotate(modelMatrixIslas,glm::radians(-90.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
 	// modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0f, 19.0f, 0.0f));
 	// modelMatrixIslas = glm::scale(modelMatrixIslas, glm::vec3(0.35f, 0.8f, 0.63f));
 	
@@ -526,21 +528,28 @@ bool processInput(bool continueApplication) {
 	offsetX = 0;
 	offsetY = 0;
 
-	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS){
+	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS && toogle_CRTL){
 		//std::cout << "CTRL PRESSED " << std::endl;
-		if(glfwGetKey(window,GLFW_KEY_K)==GLFW_PRESS && !ctrl_Y_Toogle){
+		toogle_CRTL = false;
+		if(glfwGetKey(window,GLFW_KEY_K)==GLFW_PRESS && toogle_K){
 			std::cout << "First person camera: " << first_person_camera << std::endl; 
 			first_person_camera = !first_person_camera;
-			ctrl_Y_Toogle = true;
+			toogle_K = false;
+		}else if(glfwGetKey(window,GLFW_KEY_K)==GLFW_RELEASE){
+			toogle_K = true;
 		}
-		if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS){
+		if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS && toogle_Save){
 			writeModelPositionsToFile(modelsMapping);
+			toogle_Save = false;
 			//std::cout<<"Model positions written to file"<<std::endl;
-			return continueApplication;
+			//return continueApplication;
+		}else if(glfwGetKey(window,GLFW_KEY_S)==GLFW_RELEASE){
+			toogle_Save = true;
+			std::cout << "Model positions written to file" << std::endl;
 		}
 	}
-	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL)==GLFW_RELEASE || glfwGetKey(window,GLFW_KEY_K)==GLFW_RELEASE)
-		ctrl_Y_Toogle = false;
+	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL)==GLFW_RELEASE)
+		toogle_CRTL = true;
 
 	//************************* */
 	//Controles Goyo
@@ -614,6 +623,10 @@ bool processInput(bool continueApplication) {
 	if(glfwGetKey(window,GLFW_KEY_R)==GLFW_PRESS){
 		transformModeType = 1;
 		std::cout << "Rotate mode" << std::endl;
+	}
+	if(glfwGetKey(window,GLFW_KEY_Y)==GLFW_PRESS){
+		transformModeType = 2;
+		std::cout << "Scale mode" << std::endl;
 	}
 
 	glfwPollEvents();
@@ -864,24 +877,43 @@ void transformModeFunc(int mode, glm::mat4 * modelMatrix){
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
 			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, -0.1, 0.0));
 		}
-	}else{
+	}else if (mode == 1){ //Rotación
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(5.0f), glm::vec3(1, 0, 0));
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(0.05f), glm::vec3(1, 0, 0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-0.05f), glm::vec3(1, 0, 0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(5.0f), glm::vec3(0, 1, 0));
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(0.05f), glm::vec3(0, 1, 0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-5.0f), glm::vec3(0, 1, 0));
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-0.05f), glm::vec3(0, 1, 0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(5.0f), glm::vec3(0, 0, 1));
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(0.05f), glm::vec3(0, 0, 1));
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-5.0f), glm::vec3(0, 0, 1));
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-0.05f), glm::vec3(0, 0, 1));
+		}
+	} else if (mode == 2){
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+			*modelMatrix = glm::scale(*modelMatrix, glm::vec3(1.0, 1.0, 1.01));
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+			*modelMatrix = glm::scale(*modelMatrix, glm::vec3(1.0, 1.0, 0.99));
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+			*modelMatrix = glm::scale(*modelMatrix, glm::vec3(0.99, 1.0, 1.0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+			*modelMatrix = glm::scale(*modelMatrix, glm::vec3(1.01, 1.0, 1.0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+			*modelMatrix = glm::scale(*modelMatrix, glm::vec3(1.0, 1.01, 1.0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+			*modelMatrix = glm::scale(*modelMatrix, glm::vec3(1.0, 0.99, 1.0));
 		}
 	}
 }
