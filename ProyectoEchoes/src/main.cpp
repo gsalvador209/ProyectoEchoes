@@ -86,15 +86,27 @@ float GRAVITY = 5;
 double tmv = 0;
 double startTimeJump = 0;
 
+//Modo transformación
+bool transformModeEna = false;
+bool toogleTransformModeEna = true;
+int transformModeType = 0; //0.- Translate, 1.- Rotate
+bool toogleDebug = true;
+int modelSelected = 0;
+bool toogleModelSelected = true;
+int modelsCount = 0;
+std::map<int, glm::mat4*> modelsMapping;
+std::map<int, glm::mat4> fileData;	
+
 //Declaracion de los objetos geometricos
 Sphere skyboxSphere(20, 20);
 Box boxCollider;
 Sphere modelSphereCollider(10, 10);
 Model goyo;
 Model islas;
+Model stage;
 
 // Terrain model instance
-Terrain terrain(-1, -1, 100, 8, "../Textures/echoesHeightMap.png");
+Terrain terrain(-0.75, -0.75, 600, 4, "../Textures/echoesHeightMap.png");
 
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
@@ -119,9 +131,14 @@ bool exitApp = false;
 int lastMousePosX, offsetX = 0;
 int lastMousePosY, offsetY = 0;
 
-// Model matrix definitions
+
+
+
+
+// Model matrix definitions DEBEN MAPEARSE EN modelMap
 glm::mat4 modelMatrixGoyo = glm::mat4(1.0f);
 glm::mat4 modelMatrixIslas = glm::mat4(1.0f);
+glm::mat4 modelMatrixStage = glm::mat4(1.0f);
 
 // Animation variables
 int animationGoyoIndex = 0;
@@ -146,6 +163,10 @@ void mouseButtonCallback(GLFWwindow *window, int button, int state, int mod);
 void init(int width, int height, std::string strTitle, bool bFullScreen);
 void destroy();
 bool processInput(bool continueApplication = true);
+void transformModeFunc(int,glm::mat4*);
+void writeModelPositionsToFile(std::map<int, glm::mat4*> modelsMapping);
+std::string mat4ToString(const glm::mat4 mat);
+std::map<int, glm::mat4> readModelPositionsFromFile();
 
 // Implementacion de todas las funciones.
 void init(int width, int height, std::string strTitle, bool bFullScreen) {
@@ -201,6 +222,26 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
+	fileData = readModelPositionsFromFile();
+	modelsCount = fileData.size();
+	// auto itModelPositions = fileData.begin();
+	// for (; itModelPositions != fileData.end(); itModelPositions++)
+	// {
+		
+	// }
+	
+	//Recobrar información de los archivos
+	
+	modelMatrixGoyo = fileData[0];
+	modelMatrixIslas = fileData[1];
+	modelMatrixStage = fileData[2];
+
+	//Mappeo de matrices
+	modelsMapping[0] = &modelMatrixGoyo;
+	modelsMapping[1] = &modelMatrixIslas;
+	modelsMapping[2] = &modelMatrixStage;
+
+
 	// Inicialización de los shaders
 	shader.initialize("../Shaders/colorShader.vs", "../Shaders/colorShader.fs");
 	shaderSkybox.initialize("../Shaders/skyBox.vs", "../Shaders/skyBox.fs");
@@ -230,10 +271,15 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//ISLAS
 	islas.loadModel("../models/Islas/Islas.fbx");
 	islas.setShader(&shaderMulLighting);
+
+	//STAGE
+	stage.loadModel("../models/Stage/Stage.fbx");
+	stage.setShader(&shaderMulLighting);
 	
-	modelMatrixIslas = glm::rotate(modelMatrixIslas,glm::radians(-90.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
-	modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0f, 19.0f, 0.0f));
-	modelMatrixIslas = glm::scale(modelMatrixIslas, glm::vec3(0.35f, 0.63f, 0.8f));
+	// modelMatrixIslas = glm::rotate(modelMatrixIslas,glm::radians(-90.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
+	// modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0f, 19.0f, 0.0f));
+	// modelMatrixIslas = glm::scale(modelMatrixIslas, glm::vec3(0.35f, 0.8f, 0.63f));
+	
 
 	// Terreno
 	terrain.init();
@@ -388,6 +434,7 @@ void destroy() {
 	skyboxSphere.destroy();
 	goyo.destroy();
 	islas.destroy();
+	stage.destroy();
 
 	// Terrains objects Delete
 	terrain.destroy();
@@ -458,6 +505,12 @@ bool processInput(bool continueApplication) {
 		return false;
 	}
 
+	if(GLFW_KEY_T==GLFW_PRESS && toogleDebug){
+		transformModeEna = !transformModeEna;
+		toogleDebug = false;	
+	}else if(GLFW_KEY_T==GLFW_RELEASE){
+		toogleDebug = true;
+	}
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		camera->mouseMoveCamera(offsetX, offsetY, deltaTime);
@@ -480,6 +533,11 @@ bool processInput(bool continueApplication) {
 			first_person_camera = !first_person_camera;
 			ctrl_Y_Toogle = true;
 		}
+		if(glfwGetKey(window,GLFW_KEY_S)==GLFW_PRESS){
+			writeModelPositionsToFile(modelsMapping);
+			//std::cout<<"Model positions written to file"<<std::endl;
+			return continueApplication;
+		}
 	}
 	if(glfwGetKey(window,GLFW_KEY_LEFT_CONTROL)==GLFW_RELEASE || glfwGetKey(window,GLFW_KEY_K)==GLFW_RELEASE)
 		ctrl_Y_Toogle = false;
@@ -487,47 +545,75 @@ bool processInput(bool continueApplication) {
 	//************************* */
 	//Controles Goyo
 	//************************* */
-	if(!isJump && (window,GLFW_KEY_SPACE)== GLFW_PRESS && animationGoyoIndex != 9){
-		isJump = true;
-		tmv = 0;
-		startTimeJump = currTime;
-		if ((glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS)&&(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)) {
-			animationGoyoIndex = 11;
-		}else{
-			animationGoyoIndex = 9;
-		}//return continueApplication;
-	}
-	if(glfwGetKey(window,GLFW_KEY_A)== GLFW_PRESS){
-		modelMatrixGoyo = glm::rotate(modelMatrixGoyo,0.04f,glm::vec3(0,1,0));
-		angleTarget += 0.04f;
-		fp_camera->mouseMoveCamera(-3,0,deltaTime);
-	}else if(glfwGetKey(window,GLFW_KEY_D)== GLFW_PRESS){
-		modelMatrixGoyo = glm::rotate(modelMatrixGoyo,-0.04f,glm::vec3(0,1,0));
-		angleTarget -= 0.04f;
-		fp_camera->mouseMoveCamera(3,0,deltaTime);
-	}
-	if(glfwGetKey(window,GLFW_KEY_W)== GLFW_PRESS){
-		if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS){
-			modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(runVelocity,0,0));
-			if (glfwGetKey(window,GLFW_KEY_SPACE)== GLFW_PRESS){
+	if(!transformModeEna){
+		if(!isJump && (window,GLFW_KEY_SPACE)== GLFW_PRESS && animationGoyoIndex != 9){
+			isJump = true;
+			tmv = 0;
+			startTimeJump = currTime;
+			if ((glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS)&&(glfwGetKey(window,GLFW_KEY_W)==GLFW_PRESS)) {
 				animationGoyoIndex = 11;
-			}else if(animationGoyoIndex != 11){
-				animationGoyoIndex = 5;
+			}else{
+				animationGoyoIndex = 9;
+			}//return continueApplication;
+		}
+		if(glfwGetKey(window,GLFW_KEY_A)== GLFW_PRESS){
+			modelMatrixGoyo = glm::rotate(modelMatrixGoyo,0.04f,glm::vec3(0,1,0));
+			angleTarget += 0.04f;
+			fp_camera->mouseMoveCamera(-3,0,deltaTime);
+		}else if(glfwGetKey(window,GLFW_KEY_D)== GLFW_PRESS){
+			modelMatrixGoyo = glm::rotate(modelMatrixGoyo,-0.04f,glm::vec3(0,1,0));
+			angleTarget -= 0.04f;
+			fp_camera->mouseMoveCamera(3,0,deltaTime);
+		}
+		if(glfwGetKey(window,GLFW_KEY_W)== GLFW_PRESS){
+			if(glfwGetKey(window,GLFW_KEY_LEFT_SHIFT)==GLFW_PRESS){
+				modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(runVelocity,0,0));
+				if (glfwGetKey(window,GLFW_KEY_SPACE)== GLFW_PRESS){
+					animationGoyoIndex = 11;
+				}else if(animationGoyoIndex != 11){
+					animationGoyoIndex = 5;
+				}
+			}else{
+				modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(velocity,0,0));
+				animationGoyoIndex = 3;
 			}
-		}else{
-			modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(velocity,0,0));
+		}else if(glfwGetKey(window,GLFW_KEY_S)== GLFW_PRESS){
+			modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(-velocity,0,0));
 			animationGoyoIndex = 3;
 		}
-	}else if(glfwGetKey(window,GLFW_KEY_S)== GLFW_PRESS){
-		modelMatrixGoyo = glm::translate(modelMatrixGoyo,glm::vec3(-velocity,0,0));
-		animationGoyoIndex = 3;
+
+		bool keySpaceStatus = glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS;
+		if(keySpaceStatus && !isJump){
+			isJump = true;
+			startTimeJump = currTime;
+			tmv = 0; 
+		}
+	
 	}
 
-	bool keySpaceStatus = glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS;
-	if(keySpaceStatus && !isJump){
-		isJump = true;
-		startTimeJump = currTime;
-		tmv = 0; 
+	if(glfwGetKey(window,GLFW_KEY_TAB)==GLFW_PRESS && toogleModelSelected){
+		modelSelected= (modelSelected+1)%modelsCount;
+		std::cout << "Model selected: " << modelSelected << std::endl;
+		toogleModelSelected = false;
+	}else if(glfwGetKey(window,GLFW_KEY_TAB)==GLFW_RELEASE){
+		toogleModelSelected = true;
+	}
+
+	if(glfwGetKey(window,GLFW_KEY_J)==GLFW_PRESS && toogleTransformModeEna){
+		transformModeEna = !transformModeEna;
+		toogleTransformModeEna = false;
+		std::cout << "Transform mode: " << transformModeEna << std::endl;
+	}else if (glfwGetKey(window,GLFW_KEY_J)==GLFW_RELEASE){
+		toogleTransformModeEna = true;
+	}
+
+	if(glfwGetKey(window,GLFW_KEY_G)==GLFW_PRESS){
+		transformModeType = 0;
+		std::cout << "Translate mode" << std::endl;
+	}
+	if(glfwGetKey(window,GLFW_KEY_R)==GLFW_PRESS){
+		transformModeType = 1;
+		std::cout << "Rotate mode" << std::endl;
 	}
 
 	glfwPollEvents();
@@ -553,11 +639,20 @@ void applicationLoop() {
 		psi = processInput(true);
 		std::map<std::string,bool> collisionDetection;
 
+		if(transformModeEna){
+			//std::cout << "Transform mode" << std::endl;
+			//std::cout << "Model selected: " << modelSelected << std::endl;
+			glm::mat4* model = modelsMapping[modelSelected];
+			transformModeFunc(transformModeType,model);
+		}
+
+
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//Configuración de perspectiva y camara 
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
-				(float) screenWidth / (float) screenHeight, 0.01f, 100.0f);
+				(float) screenWidth / (float) screenHeight, 0.01f, 1000.0f);
 		camera->setSensitivity(1.2);
 		camera->setDistanceFromTarget(distanceFromPlayer);
 		positionTarget = modelMatrixGoyo[3]+glm::vec4(0.0f,2.0f,0.0f,0.0f);
@@ -646,7 +741,7 @@ void applicationLoop() {
 		terrain.render();
 		shaderTerrain.setVectorFloat2("scaleUV", glm::value_ptr(glm::vec2(0, 0)));
 		glBindTexture(GL_TEXTURE_2D, 0);
-
+		
 		/*******************************************
 		 * Custom objects obj
 		 *******************************************/
@@ -655,7 +750,7 @@ void applicationLoop() {
 		//Goyo
 		float z_goyo = terrain.getHeightTerrain(modelMatrixGoyo[3][0], modelMatrixGoyo[3][2]);	
 		glm::mat4 modelMatrixGoyoBody = glm::mat4(modelMatrixGoyo);
-		modelMatrixGoyoBody = glm::scale(modelMatrixGoyoBody, glm::vec3(0.001f));
+		modelMatrixGoyoBody = glm::scale(modelMatrixGoyoBody, glm::vec3(0.0025f));
 		modelMatrixGoyo[3][1] = z_goyo;
 		modelMatrixGoyo[3][1] = -GRAVITY*tmv*tmv + 4*tmv + z_goyo;
 		tmv = currTime-startTimeJump;
@@ -671,8 +766,10 @@ void applicationLoop() {
 		goyo.render(modelMatrixGoyoBody);
 		
 		//Islas
-		modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0, 0.0, 0.0));
 		islas.render(modelMatrixIslas);
+
+		//Stage
+		stage.render(modelMatrixStage);
 
 
 
@@ -740,8 +837,110 @@ void applicationLoop() {
 			}
 		}
 		
+		
 		glfwSwapBuffers(window);
 	}
+}
+
+//Modo para mover obejetos
+void transformModeFunc(int mode, glm::mat4 * modelMatrix){
+	//glm::mat4 modelMatrix = glm::make_mat4(modelMatrixModel);
+	if (mode == 0){ //Traslación
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.0, 0.1));
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.0, -0.1));
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(-0.1, 0.0, 0.0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.1, 0.0, 0.0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.1, 0.0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, -0.1, 0.0));
+		}
+	}else{
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(5.0f), glm::vec3(1, 0, 0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(5.0f), glm::vec3(0, 1, 0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-5.0f), glm::vec3(0, 1, 0));
+		}
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(5.0f), glm::vec3(0, 0, 1));
+		}
+		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
+			*modelMatrix = glm::rotate(*modelMatrix, glm::radians(-5.0f), glm::vec3(0, 0, 1));
+		}
+	}
+}
+
+void writeModelPositionsToFile(std::map<int, glm::mat4*> modelsMapping) {
+	std::ofstream outFile("../models/positions.txt");
+	std::stringstream ss;
+	if (!outFile) {
+		std::cerr << "Failed to open file for writing" << std::endl;
+		return;
+	}
+	//std::cout << "Writing model positions to file" << std::endl;
+
+
+	for (int i= 0 ; i < modelsCount ; i++){
+		ss << i << " " << mat4ToString(*modelsMapping[i]) <<std::endl;
+		//std::cout << mat4ToString(*modelsMapping[0]) << std::endl;
+	}
+	outFile << ss.str();
+	outFile.close();
+}
+
+std::map<int, glm::mat4> readModelPositionsFromFile() {
+	std::map<int, glm::mat4> modelsMapping;
+	std::ifstream inFile("../models/positions.txt");
+	if (!inFile) {
+		std::cerr << "Failed to open file for reading" << std::endl;
+		return modelsMapping;
+	}
+
+	std::string line;
+	while (std::getline(inFile, line)) {
+		std::istringstream ss(line);
+		int id;
+		ss >> id;
+		glm::mat4 mat;
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				ss >> mat[i][j];
+			}
+		}
+		modelsMapping[id] = mat;
+	}
+
+	inFile.close();
+	return modelsMapping;
+}
+
+std::string mat4ToString(const glm::mat4 mat) {
+	std::stringstream ss;
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			ss << mat[i][j];
+			if (i != 3 || j != 3) {
+				ss << " ";
+			}
+		}
+	}
+	return ss.str();
 }
 
 int main(int argc, char **argv) {
