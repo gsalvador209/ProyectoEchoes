@@ -106,6 +106,8 @@ Sphere modelSphereCollider(10, 10);
 Model goyo;
 Model islas;
 Model stage;
+Model lata;
+Model basura;
 
 // Terrain model instance
 Terrain terrain(-0.75, -0.75, 600, 6, "../Textures/echoesHeightMap.png");
@@ -122,12 +124,12 @@ GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
 GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
 GL_TEXTURE_CUBE_MAP_NEGATIVE_Z };
 
-std::string fileNames[6] = { "../Textures/mp_bloodvalley/blood-valley_ft.tga",
-		"../Textures/mp_bloodvalley/blood-valley_bk.tga",
-		"../Textures/mp_bloodvalley/blood-valley_up.tga",
-		"../Textures/mp_bloodvalley/blood-valley_dn.tga",
-		"../Textures/mp_bloodvalley/blood-valley_rt.tga",
-		"../Textures/mp_bloodvalley/blood-valley_lf.tga" };
+std::string fileNames[6] = { "../Textures/Yokohama2/posx.jpg",
+		"../Textures/Yokohama2/negx.jpg",
+		"../Textures/Yokohama2/posy.jpg",
+		"../Textures/Yokohama2/negy.jpg",
+		"../Textures/Yokohama2/posz.jpg",
+		"../Textures/Yokohama2/negz.jpg" };
 
 bool exitApp = false;
 int lastMousePosX, offsetX = 0;
@@ -141,6 +143,8 @@ int lastMousePosY, offsetY = 0;
 glm::mat4 modelMatrixGoyo = glm::mat4(1.0f);
 glm::mat4 modelMatrixIslas = glm::mat4(1.0f);
 glm::mat4 modelMatrixStage = glm::mat4(1.0f);
+glm::mat4 modelMatrixLata = glm::mat4(1.0f);
+glm::mat4 modelMatrixBasura = glm::mat4(1.0f);
 
 // Animation variables
 int animationGoyoIndex = 0;
@@ -237,12 +241,17 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelMatrixGoyo = fileData[0];
 	modelMatrixIslas = fileData[1];
 	modelMatrixStage = fileData[2];
+	modelMatrixLata = fileData[3];
+	modelMatrixBasura = fileData[4];
 
 	//Mappeo de matrices
 	modelsMapping[0] = &modelMatrixGoyo;
 	modelsMapping[1] = &modelMatrixIslas;
 	modelsMapping[2] = &modelMatrixStage;
+	modelsMapping[3] = &modelMatrixLata;
+	modelsMapping[4] = &modelMatrixBasura;	
 
+	
 
 	// Inicialización de los shaders
 	shader.initialize("../Shaders/colorShader.vs", "../Shaders/colorShader.fs");
@@ -260,7 +269,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//Box collider
 	boxCollider.init();
 	boxCollider.setShader(&shader);
-	boxCollider.setColor(glm::vec4(0.0f,1.0f, 1.0f, 1.0f));
+	boxCollider.setColor(glm::vec4(1.0f,1.0f, 1.0f, 1.0f));
 
 	modelSphereCollider.init();
 	modelSphereCollider.setShader(&shader);
@@ -277,6 +286,14 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//STAGE
 	stage.loadModel("../models/Stage/Stage.fbx");
 	stage.setShader(&shaderMulLighting);
+
+	//LATA
+	lata.loadModel("../models/Props/Lata_pepsi.fbx");
+	lata.setShader(&shaderMulLighting);
+
+	//BASURA
+	basura.loadModel("../models/Props/Bote.fbx");
+	basura.setShader(&shaderMulLighting);
 	
 	 //modelMatrixIslas = glm::rotate(modelMatrixIslas,glm::radians(-90.0f) , glm::vec3(1.0f, 0.0f, 0.0f));
 	// modelMatrixIslas = glm::translate(modelMatrixIslas, glm::vec3(0.0f, 19.0f, 0.0f));
@@ -437,6 +454,8 @@ void destroy() {
 	goyo.destroy();
 	islas.destroy();
 	stage.destroy();
+	lata.destroy();
+	basura.destroy();
 
 	// Terrains objects Delete
 	terrain.destroy();
@@ -787,7 +806,9 @@ void applicationLoop() {
 		stage.render(modelMatrixStage);
 		glEnable(GL_CULL_FACE);
 
+		lata.render(modelMatrixLata);
 
+		basura.render(modelMatrixBasura);		
 
 		/*******************************************
 		 * Skybox
@@ -804,6 +825,17 @@ void applicationLoop() {
 		skyboxSphere.render();
 		glCullFace(oldCullFaceMode);
 		glDepthFunc(oldDepthFuncMode);
+
+
+		//Crear colisión
+		glm::mat4 colliderMatrixGoyo = glm::mat4(modelMatrixGoyo);	
+		AbstractModel::OBB goyoCollider;
+		goyoCollider.u = glm::quat_cast(modelMatrixGoyo);
+		colliderMatrixGoyo = glm::scale(colliderMatrixGoyo,glm::vec3(0.0025f));	
+		//colliderMatrixGoyo = glm::translate(colliderMatrixGoyo,glm::vec3((*modelsMapping[0])[2][0],(*modelsMapping[0])[2][1],(*modelsMapping[0])[2][2]));
+		goyoCollider.c = colliderMatrixGoyo[3];
+		goyoCollider.e = goyo.getObb().e*glm::vec3(0.5);
+		addOrUpdateColliders(collidersOBB,"Goyo",goyoCollider,modelMatrixGoyo);	
 
 
 		//Pruebas de collision
@@ -853,6 +885,29 @@ void applicationLoop() {
 			}
 		}
 		
+		//Para visualizar los colliders
+		auto it = collidersSBB.begin();
+		for(;it != collidersSBB.end();it++){
+			glm::mat4 matrixCollider = glm::mat4(1.0);
+			AbstractModel::SBB collider = std::get<0>(it->second);
+			matrixCollider = glm::translate(matrixCollider,collider.c); 
+			matrixCollider = glm::scale(matrixCollider, glm::vec3(collider.ratio*2.0f));
+			modelSphereCollider.enableWireMode();
+			modelSphereCollider.render(matrixCollider);
+			//Accede al centro del elemento 0 de LA TUPLA,
+			//es decir, al Abstract Model
+		}	
+
+		auto itObb = collidersOBB.begin();
+		//std::cout << "Colliders OBB" << std::endl;
+		for(;itObb != collidersOBB.end(); itObb++){
+			AbstractModel::OBB collider = std::get<0>(itObb->second);
+			glm::mat4 matrixCollider = glm::translate(glm::mat4(1.0),collider.c);
+			matrixCollider = matrixCollider*glm::mat4(collider.u);
+			matrixCollider = glm::scale(matrixCollider,collider.e*2.0f);
+			boxCollider.enableWireMode();
+			boxCollider.render(matrixCollider);
+		}
 		
 		glfwSwapBuffers(window);
 	}
