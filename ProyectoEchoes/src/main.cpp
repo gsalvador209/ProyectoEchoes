@@ -112,6 +112,10 @@ Model basura;
 // Terrain model instance
 Terrain terrain(-0.75, -0.75, 600, 6, "../Textures/echoesHeightMap.png");
 
+// Mecanica de basura
+bool basuraRecogida = false;
+bool boteCerca = false;	
+bool toogle_Key_F = true;
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
 GLuint skyboxTextureID;
@@ -611,6 +615,19 @@ bool processInput(bool continueApplication) {
 			animationGoyoIndex = 3;
 		}
 
+		if(glfwGetKey(window,GLFW_KEY_F)==GLFW_PRESS && basuraRecogida && boteCerca && toogle_Key_F){
+			basuraRecogida = false;
+			toogle_Key_F = false;
+			std::cout << "Basura tirada" << std::endl;
+		}else if(glfwGetKey(window,GLFW_KEY_F)==GLFW_PRESS && !basuraRecogida && boteCerca && toogle_Key_F){
+			toogle_Key_F = false;
+			std::cout << "Aqui puedes tirar basura" << std::endl;
+		}else if (glfwGetKey(window,GLFW_KEY_F)==GLFW_RELEASE){
+			toogle_Key_F = true;
+		}
+		
+		
+
 		bool keySpaceStatus = glfwGetKey(window,GLFW_KEY_SPACE) == GLFW_PRESS;
 		if(keySpaceStatus && !isJump){
 			isJump = true;
@@ -799,10 +816,11 @@ void applicationLoop() {
 		goyo.render(modelMatrixGoyoBody);
 		
 		//Islas
+		glDisable(GL_CULL_FACE);
 		islas.render(modelMatrixIslas);
 
 		//Stage
-		glDisable(GL_CULL_FACE);
+		
 		stage.render(modelMatrixStage);
 		glEnable(GL_CULL_FACE);
 
@@ -828,14 +846,33 @@ void applicationLoop() {
 
 
 		//Crear colisión
+		//OBB goyo
 		glm::mat4 colliderMatrixGoyo = glm::mat4(modelMatrixGoyo);	
 		AbstractModel::OBB goyoCollider;
 		goyoCollider.u = glm::quat_cast(modelMatrixGoyo);
-		colliderMatrixGoyo = glm::scale(colliderMatrixGoyo,glm::vec3(0.0025f));	
+		colliderMatrixGoyo = glm::scale(colliderMatrixGoyo,glm::vec3(0.1f));	
 		//colliderMatrixGoyo = glm::translate(colliderMatrixGoyo,glm::vec3((*modelsMapping[0])[2][0],(*modelsMapping[0])[2][1],(*modelsMapping[0])[2][2]));
 		goyoCollider.c = colliderMatrixGoyo[3];
-		goyoCollider.e = goyo.getObb().e*glm::vec3(0.5);
+		goyoCollider.e = goyo.getObb().e*glm::vec3(0.01f,0.05f,0.05f);
 		addOrUpdateColliders(collidersOBB,"Goyo",goyoCollider,modelMatrixGoyo);	
+
+		//SBB Basura
+		glm::mat4 colliderMatrixBasura = glm::mat4(modelMatrixBasura);
+		colliderMatrixBasura = glm::scale(colliderMatrixBasura,glm::vec3(1.0f)); //Escalamiento por si se aplico uno a la roca
+		colliderMatrixBasura = glm::translate(colliderMatrixBasura,basura.getSbb().c);
+		AbstractModel::SBB basuraCollider;
+		basuraCollider.c = colliderMatrixBasura[3]; //Usa la posicion trasladada para determinar el origen
+		basuraCollider.ratio = basura.getSbb().ratio*0.5; //Supongo que en realidad es radius, no?
+		addOrUpdateColliders(collidersSBB,"Basura",basuraCollider,modelMatrixBasura);
+		
+		//SBB Lata
+		glm::mat4 colliderMatrixLata = glm::mat4(modelMatrixLata);
+		colliderMatrixLata = glm::scale(colliderMatrixLata,glm::vec3(1.0f)); //Escalamiento por si se aplico uno a la roca
+		colliderMatrixLata = glm::translate(colliderMatrixLata,lata.getSbb().c);
+		AbstractModel::SBB lataCollider;
+		lataCollider.c = colliderMatrixLata[3]; //Usa la posicion trasladada para determinar el origen
+		lataCollider.ratio = lata.getSbb().ratio*0.5; //Supongo que en realidad es radius, no?
+		addOrUpdateColliders(collidersSBB,"Lata",lataCollider,modelMatrixLata);
 
 
 		//Pruebas de collision
@@ -845,6 +882,8 @@ void applicationLoop() {
 			auto jtOBBC = collidersOBB.begin();
 			for(; jtOBBC != collidersOBB.end(); jtOBBC++){
 				if(itOBBC != jtOBBC && testOBBOBB(std::get<0>(itOBBC->second),std::get<0>(jtOBBC->second))){
+					
+					
 					std::cout << "Colision entre " << itOBBC->first << " y " << jtOBBC->first << std::endl;	
 					isCollision = true;
 					addOrUpdateCollisionDetection(collisionDetection,itOBBC->first,isCollision);	
@@ -861,7 +900,12 @@ void applicationLoop() {
 			auto itSBBC = collidersSBB.begin();
 			for(;itSBBC!=collidersSBB.end();itSBBC++){
 				if(testSphereOBox(std::get<0>(itSBBC->second),std::get<0>(itOBBC->second))){
-					std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
+					if(itSBBC->first == "Basura" && itOBBC->first == "Goyo"){
+							boteCerca = true;
+						}else{
+							boteCerca = false;
+						}
+					//std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
 					isCollision = true;
 					addOrUpdateCollisionDetection(collisionDetection,itSBBC->first,true);
 				}
@@ -877,7 +921,8 @@ void applicationLoop() {
 			for(;jtSBBC!=collidersSBB.end();jtSBBC++){
 				if(itSBBC != jtSBBC && testSphereSphereIntersection(
 					std::get<0>(itSBBC->second),std::get<0>(jtSBBC->second))){
-						std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
+						
+						//std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
 						isCollision = true;
 						addOrUpdateCollisionDetection(collisionDetection,jtSBBC->first,true);
 				}
@@ -918,22 +963,22 @@ void transformModeFunc(int mode, glm::mat4 * modelMatrix){
 	//glm::mat4 modelMatrix = glm::make_mat4(modelMatrixModel);
 	if (mode == 0){ //Traslación
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.0, 0.1));
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.0, 1));
 		}
 		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
-			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.0, -0.1));
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.0, -1));
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS){
-			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(-0.1, 0.0, 0.0));
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(-1, 0.0, 0.0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS){
-			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.1, 0.0, 0.0));
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(1, 0.0, 0.0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS){
-			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 0.1, 0.0));
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, 1, 0.0));
 		}
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS){
-			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, -0.1, 0.0));
+			*modelMatrix = glm::translate(*modelMatrix, glm::vec3(0.0, -1, 0.0));
 		}
 	}else if (mode == 1){ //Rotación
 		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
