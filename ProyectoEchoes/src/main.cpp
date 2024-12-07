@@ -107,6 +107,8 @@ Model goyo;
 Model islas;
 Model stage;
 Model lata;
+Model pizza;
+Model vaso;
 Model basura;
 
 // Terrain model instance
@@ -115,6 +117,7 @@ Terrain terrain(-0.75, -0.75, 600, 6, "../Textures/echoesHeightMap.png");
 // Mecanica de basura
 bool basuraRecogida = false;
 bool boteCerca = false;	
+int basuraCerca = 0;
 bool toogle_Key_F = true;
 
 GLuint textureCespedID, textureTerrainRID,textureTerrainGID,textureTerrainBID,textureTerrainBlendMapID;
@@ -148,6 +151,8 @@ glm::mat4 modelMatrixGoyo = glm::mat4(1.0f);
 glm::mat4 modelMatrixIslas = glm::mat4(1.0f);
 glm::mat4 modelMatrixStage = glm::mat4(1.0f);
 glm::mat4 modelMatrixLata = glm::mat4(1.0f);
+glm::mat4 modelMatrixPizza = glm::mat4(1.0f);
+glm::mat4 modelMatrixVaso = glm::mat4(1.0f);
 glm::mat4 modelMatrixBasura = glm::mat4(1.0f);
 
 // Animation variables
@@ -246,14 +251,18 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelMatrixIslas = fileData[1];
 	modelMatrixStage = fileData[2];
 	modelMatrixLata = fileData[3];
-	modelMatrixBasura = fileData[4];
+	modelMatrixPizza = fileData[4];
+	modelMatrixVaso = fileData[5];
+	modelMatrixBasura = fileData[6];
 
 	//Mappeo de matrices
 	modelsMapping[0] = &modelMatrixGoyo;
 	modelsMapping[1] = &modelMatrixIslas;
 	modelsMapping[2] = &modelMatrixStage;
 	modelsMapping[3] = &modelMatrixLata;
-	modelsMapping[4] = &modelMatrixBasura;	
+	modelsMapping[4] = &modelMatrixPizza;
+	modelsMapping[5] = &modelMatrixVaso;
+	modelsMapping[6] = &modelMatrixBasura;
 
 	
 
@@ -294,6 +303,14 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//LATA
 	lata.loadModel("../models/Props/Lata_pepsi.fbx");
 	lata.setShader(&shaderMulLighting);
+
+	//PIZZA
+	pizza.loadModel("../models/Props/Pizza.fbx");
+	pizza.setShader(&shaderMulLighting);
+
+	//VASO
+	vaso.loadModel("../models/Props/Vaso.fbx");
+	vaso.setShader(&shaderMulLighting);
 
 	//BASURA
 	basura.loadModel("../models/Props/Bote.fbx");
@@ -459,6 +476,8 @@ void destroy() {
 	islas.destroy();
 	stage.destroy();
 	lata.destroy();
+	pizza.destroy();
+	vaso.destroy();
 	basura.destroy();
 
 	// Terrains objects Delete
@@ -622,6 +641,11 @@ bool processInput(bool continueApplication) {
 		}else if(glfwGetKey(window,GLFW_KEY_F)==GLFW_PRESS && !basuraRecogida && boteCerca && toogle_Key_F){
 			toogle_Key_F = false;
 			std::cout << "Aqui puedes tirar basura" << std::endl;
+		}else if(glfwGetKey(window,GLFW_KEY_F)==GLFW_PRESS && basuraCerca != 0){ //basuraCerca
+			basuraRecogida = true;
+			*modelsMapping[basuraCerca] = glm::mat4(0.00001f);
+			toogle_Key_F = false;
+			std::cout << "Basura recogida" << std::endl;
 		}else if (glfwGetKey(window,GLFW_KEY_F)==GLFW_RELEASE){
 			toogle_Key_F = true;
 		}
@@ -825,6 +849,8 @@ void applicationLoop() {
 		glEnable(GL_CULL_FACE);
 
 		lata.render(modelMatrixLata);
+		pizza.render(modelMatrixPizza);
+		vaso.render(modelMatrixVaso);
 
 		basura.render(modelMatrixBasura);		
 
@@ -874,6 +900,23 @@ void applicationLoop() {
 		lataCollider.ratio = lata.getSbb().ratio*0.5; //Supongo que en realidad es radius, no?
 		addOrUpdateColliders(collidersSBB,"Lata",lataCollider,modelMatrixLata);
 
+		//SBB Pizza
+		glm::mat4 colliderMatrixPizza = glm::mat4(modelMatrixPizza);
+		colliderMatrixPizza = glm::scale(colliderMatrixPizza,glm::vec3(1.0f)); //Escalamiento por si se aplico uno a la roca
+		colliderMatrixPizza = glm::translate(colliderMatrixPizza,pizza.getSbb().c);
+		AbstractModel::SBB pizzaCollider;
+		pizzaCollider.c = colliderMatrixPizza[3]; //Usa la posicion trasladada para determinar el origen
+		pizzaCollider.ratio = pizza.getSbb().ratio*0.5; //Supongo que en realidad es radius, no?
+		addOrUpdateColliders(collidersSBB,"Pizza",pizzaCollider,modelMatrixPizza);
+
+		//SBB Vaso
+		glm::mat4 colliderMatrixVaso = glm::mat4(modelMatrixVaso);
+		colliderMatrixVaso = glm::scale(colliderMatrixVaso,glm::vec3(1.0f)); //Escalamiento por si se aplico uno a la roca
+		colliderMatrixVaso = glm::translate(colliderMatrixVaso,vaso.getSbb().c);
+		AbstractModel::SBB vasoCollider;
+		vasoCollider.c = colliderMatrixVaso[3]; //Usa la posicion trasladada para determinar el origen
+		vasoCollider.ratio = vaso.getSbb().ratio*0.5; //Supongo que en realidad es radius, no?
+		addOrUpdateColliders(collidersSBB,"Vaso",vasoCollider,modelMatrixVaso);
 
 		//Pruebas de collision
 		auto itOBBC = collidersOBB.begin();
@@ -902,9 +945,18 @@ void applicationLoop() {
 				if(testSphereOBox(std::get<0>(itSBBC->second),std::get<0>(itOBBC->second))){
 					if(itSBBC->first == "Basura" && itOBBC->first == "Goyo"){
 							boteCerca = true;
-						}else{
+					}else{
 							boteCerca = false;
-						}
+					}
+					if(itSBBC->first == "Lata" && itOBBC->first == "Goyo"){
+						basuraCerca = 3;
+					}else if(itSBBC->first == "Pizza" && itOBBC->first == "Goyo"){
+						basuraCerca = 4;
+					}else if(itSBBC->first == "Vaso" && itOBBC->first == "Goyo"){
+						basuraCerca = 5;
+					}else{
+						basuraCerca = 0;
+					}
 					//std::cout << "Estan colisionando" << itSBBC->first << "y" << itOBBC->first << std::endl;
 					isCollision = true;
 					addOrUpdateCollisionDetection(collisionDetection,itSBBC->first,true);
